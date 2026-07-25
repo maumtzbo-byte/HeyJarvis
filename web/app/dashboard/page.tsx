@@ -82,14 +82,14 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-semibold tracking-tight">
           Mis recuerdos
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-sm text-muted">
           Consultá los recuerdos guardados en tu cuenta de HeyJarvis.
         </p>
       </div>
 
       <form
         onSubmit={fetchMemories}
-        className="flex flex-col gap-4 rounded-lg border border-zinc-200 p-6 dark:border-zinc-800"
+        className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6"
       >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="apiUrl" className="text-sm font-medium">
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             value={apiUrl}
             onChange={(event) => setApiUrl(event.target.value)}
             placeholder="https://tu-backend.onrender.com"
-            className="h-10 rounded-md border border-zinc-300 bg-transparent px-3 text-sm outline-none focus:border-accent dark:border-zinc-700"
+            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent"
           />
         </div>
 
@@ -115,13 +115,13 @@ export default function DashboardPage() {
             value={userId}
             onChange={(event) => setUserId(event.target.value)}
             placeholder="carlos-123"
-            className="h-10 rounded-md border border-zinc-300 bg-transparent px-3 text-sm outline-none focus:border-accent dark:border-zinc-700"
+            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent"
           />
         </div>
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="apiKey" className="text-sm font-medium">
-            API key <span className="text-zinc-500">(opcional)</span>
+            API key <span className="text-muted">(opcional)</span>
           </label>
           <input
             id="apiKey"
@@ -129,7 +129,7 @@ export default function DashboardPage() {
             value={apiKey}
             onChange={(event) => setApiKey(event.target.value)}
             placeholder="Solo si el backend la exige"
-            className="h-10 rounded-md border border-zinc-300 bg-transparent px-3 text-sm outline-none focus:border-accent dark:border-zinc-700"
+            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent"
             autoComplete="off"
           />
         </div>
@@ -137,20 +137,20 @@ export default function DashboardPage() {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Buscando..." : "Ver recuerdos"}
         </button>
       </form>
 
       {error && (
-        <p className="rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
+        <p className="rounded-md border border-red-900/60 bg-red-950/40 px-4 py-3 text-sm text-red-300">
           {error}
         </p>
       )}
 
       {memories && memories.length === 0 && !error && (
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-muted">
           Todavía no hay recuerdos guardados para este usuario.
         </p>
       )}
@@ -160,11 +160,11 @@ export default function DashboardPage() {
           {memories.map((memory) => (
             <li
               key={memory.id}
-              className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+              className="rounded-2xl border border-border bg-surface p-4"
             >
               <p className="text-sm font-medium">{memory.summary}</p>
-              <p className="mt-1 text-sm text-zinc-500">{memory.text}</p>
-              <p className="mt-2 text-xs text-zinc-400">
+              <p className="mt-1 text-sm text-muted">{memory.text}</p>
+              <p className="mt-2 text-xs text-muted/70">
                 {new Date(memory.created_at).toLocaleString("es-AR")}
               </p>
             </li>

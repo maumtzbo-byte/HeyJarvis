@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const steps = [
@@ -39,76 +40,93 @@ const features = [
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
-      <section className="mx-auto flex w-full max-w-5xl flex-col items-start gap-6 px-6 py-24 sm:py-32">
-        <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+      <section className="relative flex flex-col items-center overflow-hidden px-6 pb-24 pt-20 text-center sm:pt-28">
+        <div
+          aria-hidden
+          className="orb-glow pointer-events-none absolute left-1/2 top-24 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-white/20 blur-[110px] sm:top-16"
+        />
+
+        <div className="orb-breathe relative h-40 w-40 sm:h-48 sm:w-48">
+          <Image
+            src="/brand/hero-orb.png"
+            alt="HeyJarvis"
+            fill
+            sizes="192px"
+            priority
+            className="rounded-full object-contain"
+          />
+        </div>
+
+        <span className="relative mt-8 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted">
           Fase de validación privada
         </span>
-        <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="relative mt-6 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
           Tu segundo cerebro, accesible por voz.
         </h1>
-        <p className="max-w-xl text-lg text-zinc-600 dark:text-zinc-400">
+        <p className="relative mt-5 max-w-xl text-lg text-muted">
           HeyJarvis escucha lo que le contás a través de Siri, lo recuerda, y
           te lo devuelve cuando se lo preguntás. Sin apps que abrir, sin
           notas que buscar.
         </p>
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="relative mt-8 flex flex-col gap-4 sm:flex-row">
           <Link
             href="/dashboard"
-            className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-background transition-opacity hover:opacity-90"
           >
             Ver mis recuerdos
           </Link>
           <a
             href="https://github.com/maumtzbo-byte/HeyJarvis"
-            className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-300 px-6 text-sm font-medium transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="inline-flex h-11 items-center justify-center rounded-full border border-border px-6 text-sm font-medium text-foreground transition-colors hover:bg-surface"
           >
             Ver el código
           </a>
         </div>
       </section>
 
-      <section
-        id="como-funciona"
-        className="border-t border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950"
-      >
+      <section id="como-funciona" className="border-t border-border">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-2xl font-semibold tracking-tight">
             Cómo funciona
           </h2>
-          <ol className="mt-10 grid gap-8 sm:grid-cols-3">
+          <ol className="mt-10 grid gap-6 sm:grid-cols-3">
             {steps.map((step, index) => (
-              <li key={step.title} className="flex flex-col gap-2">
-                <span className="text-sm font-medium text-accent">
+              <li
+                key={step.title}
+                className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-6"
+              >
+                <span className="text-sm font-medium text-muted">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="text-base font-semibold">{step.title}</h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {step.description}
-                </p>
+                <p className="text-sm text-muted">{step.description}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-6 py-20">
-        <h2 className="text-2xl font-semibold tracking-tight">
-          Por qué HeyJarvis
-        </h2>
-        <div className="mt-10 grid gap-8 sm:grid-cols-3">
-          {features.map((feature) => (
-            <div key={feature.title} className="flex flex-col gap-2">
-              <h3 className="text-base font-semibold">{feature.title}</h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Por qué HeyJarvis
+          </h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="flex flex-col gap-2 rounded-2xl border border-border p-6"
+              >
+                <h3 className="text-base font-semibold">{feature.title}</h3>
+                <p className="text-sm text-muted">{feature.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="border-t border-zinc-200 dark:border-zinc-800">
-        <div className="mx-auto max-w-5xl px-6 py-16 text-sm text-zinc-500">
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-5xl px-6 py-16 text-sm text-muted">
           <p>
             HeyJarvis está en fase de validación: por ahora se usa a través
             de Atajos de Siri conectados directamente a la API, sin
