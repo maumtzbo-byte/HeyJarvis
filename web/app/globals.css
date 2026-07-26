@@ -93,37 +93,6 @@ body {
   border-color: rgba(244, 243, 240, 0.35);
 }
 
-/* --- App orbit: concentric rings rotate; each item counter-rotates so it stays upright --- */
-@keyframes orbit-cw {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orbit-ccw {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
-.orbit-cw {
-  animation-name: orbit-cw;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.orbit-ccw {
-  animation-name: orbit-ccw;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
 @keyframes glow-pulse {
   0%,
   100% {
@@ -168,8 +137,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit-cw,
-  .orbit-ccw,
   .animate-glow-pulse,
   .animate-marquee,
   .animate-fade-up {

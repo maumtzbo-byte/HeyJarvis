@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const steps = [
@@ -39,64 +40,100 @@ const features = [
 const stack = ["Claude", "Supabase", "ChromaDB", "FastAPI", "Next.js", "Vercel"];
 const marqueeStack = [...stack, ...stack];
 
-type OrbitDirection = "cw" | "ccw";
+type IconKind =
+  | "doc"
+  | "chat"
+  | "mail"
+  | "list"
+  | "calendar"
+  | "cap"
+  | "heart"
+  | "card"
+  | "pin"
+  | "folder"
+  | "car"
+  | "person"
+  | "zap"
+  | "box";
 
-const orbitRings: {
-  id: string;
-  radius: string;
-  duration: number;
-  direction: OrbitDirection;
-  apps: { name: string; tag: string }[];
-}[] = [
-  {
-    id: "inner",
-    radius: "clamp(85px, 12vw, 175px)",
-    duration: 34,
-    direction: "cw",
-    apps: [
-      { name: "Notion", tag: "No" },
-      { name: "Slack", tag: "Sl" },
-      { name: "Gmail", tag: "Gm" },
-      { name: "Todoist", tag: "Td" },
-      { name: "Trello", tag: "Tr" },
-      { name: "Asana", tag: "As" },
-      { name: "ClickUp", tag: "Cu" },
-      { name: "Calendario", tag: "Ca" },
-    ],
-  },
-  {
-    id: "middle",
-    radius: "clamp(140px, 19vw, 265px)",
-    duration: 50,
-    direction: "ccw",
-    apps: [
-      { name: "WhatsApp", tag: "Wa" },
-      { name: "Telegram", tag: "Tg" },
-      { name: "Outlook", tag: "Ou" },
-      { name: "Google Classroom", tag: "Cr" },
-      { name: "Canvas", tag: "Cv" },
-      { name: "Whoop", tag: "Wh" },
-      { name: "Apple Health", tag: "He" },
-      { name: "Plaid", tag: "Pl" },
-      { name: "Maps", tag: "Mp" },
-      { name: "Drive", tag: "Dr" },
-    ],
-  },
-  {
-    id: "outer",
-    radius: "clamp(190px, 26vw, 345px)",
-    duration: 66,
-    direction: "cw",
-    apps: [
-      { name: "Uber", tag: "Ub" },
-      { name: "Lyft", tag: "Ly" },
-      { name: "Dropbox", tag: "Db" },
-      { name: "LinkedIn", tag: "In" },
-      { name: "Zapier", tag: "Za" },
-      { name: "Make", tag: "Mk" },
-      { name: "Amazon", tag: "Am" },
-    ],
-  },
+const iconPaths: Record<IconKind, string> = {
+  mail: "M3 5.5h14v9H3v-9Zm0 0 7 5.5 7-5.5",
+  chat: "M4 4.5h12v8H8.2L4.5 16V4.5Z",
+  calendar: "M3.5 4.5h13v12h-13v-12Zm0 4h13M7 2.5v4M13 2.5v4",
+  list: "M4 5.5h12M4 10h12M4 14.5h7.5",
+  doc: "M6.5 2h5l3.5 3.5V18h-8.5V2Zm5 0v3.5H15",
+  cap: "M10 3 2 7l8 4 8-4-8-4Zm-5.5 6.2V13c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7V9.2M17 8v5",
+  folder: "M3 5.5h4.5l1.6 1.8H17v9H3v-10.8Z",
+  heart: "M10 17s-6-3.8-6-8.4C4 5.6 6 4 8 4c1 0 2 .5 2 1.4C10 4.5 11 4 12 4c2 0 4 1.6 4 4.6 0 4.6-6 8.4-6 8.4Z",
+  card: "M2.5 5.5h15v9h-15v-9Zm0 3.2h15",
+  pin: "M10 18s6-6.6 6-10.6a6 6 0 1 0-12 0C4 11.4 10 18 10 18Zm0-8.4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z",
+  car: "M4 13l1.6-5.2h8.8L16 13M3 13h14v3.6a.9.9 0 0 1-.9.9H3.9a.9.9 0 0 1-.9-.9V13Zm3.3 4.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6Zm7.4 0a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6Z",
+  person: "M10 9.5a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4ZM3.8 18c0-3.7 2.8-6.4 6.2-6.4s6.2 2.7 6.2 6.4",
+  zap: "M11.2 2 4.3 12h5l-1 6.5L17.7 8h-5.2l0.7-6Z",
+  box: "M3 6.2 10 3l7 3.2-7 3.2-7-3.2Zm0 0v8.6l7 3.2 7-3.2V6.2M10 9.6v9",
+};
+
+function AppIcon({ kind }: { kind: IconKind }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-[52%] w-[52%]"
+    >
+      <path d={iconPaths[kind]} />
+    </svg>
+  );
+}
+
+type OrbitApp = { name: string; icon: IconKind };
+
+const innerRingApps: OrbitApp[] = [
+  { name: "Notion", icon: "doc" },
+  { name: "Slack", icon: "chat" },
+  { name: "Gmail", icon: "mail" },
+  { name: "Calendario", icon: "calendar" },
+  { name: "WhatsApp", icon: "chat" },
+  { name: "Drive", icon: "folder" },
+  { name: "Maps", icon: "pin" },
+  { name: "Zapier", icon: "zap" },
+  { name: "LinkedIn", icon: "person" },
+];
+
+const outerRingApps: OrbitApp[] = [
+  { name: "Todoist", icon: "list" },
+  { name: "Trello", icon: "list" },
+  { name: "Asana", icon: "list" },
+  { name: "ClickUp", icon: "list" },
+  { name: "Telegram", icon: "chat" },
+  { name: "Outlook", icon: "mail" },
+  { name: "Google Classroom", icon: "cap" },
+  { name: "Canvas", icon: "cap" },
+  { name: "Whoop", icon: "heart" },
+  { name: "Apple Health", icon: "heart" },
+  { name: "Plaid", icon: "card" },
+  { name: "Uber", icon: "car" },
+  { name: "Lyft", icon: "car" },
+  { name: "Dropbox", icon: "folder" },
+  { name: "Make", icon: "zap" },
+  { name: "Amazon", icon: "box" },
+];
+
+function ringPositions(count: number, radius: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const angle = ((360 / count) * i - 90) * (Math.PI / 180);
+    return { x: 100 + radius * Math.cos(angle), y: 100 + radius * Math.sin(angle) };
+  });
+}
+
+const innerPositions = ringPositions(innerRingApps.length, 42);
+const outerPositions = ringPositions(outerRingApps.length, 74);
+const networkNodes = [
+  ...innerRingApps.map((app, i) => ({ ...app, ...innerPositions[i], size: 15 })),
+  ...outerRingApps.map((app, i) => ({ ...app, ...outerPositions[i], size: 13 })),
 ];
 
 export default function Home() {
@@ -142,16 +179,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Rising-planet orbit: same silhouette as before, now built from the apps HeyYarvis connects to */}
+        {/* Network: HeyYarvis at the hub, every connected app as a node, lines converging to the center */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center"
         >
           <div
-            className="animate-glow-pulse absolute bottom-0 h-[420px] w-[700px] -translate-y-[6%] rounded-full opacity-70 blur-[100px] sm:h-[560px] sm:w-[960px]"
+            className="animate-glow-pulse absolute bottom-0 h-[420px] w-[700px] -translate-y-[6%] rounded-full opacity-60 blur-[100px] sm:h-[560px] sm:w-[960px]"
             style={{
               background:
-                "radial-gradient(closest-side, rgba(255,255,255,0.65), rgba(255,255,255,0.22) 55%, transparent 75%)",
+                "radial-gradient(closest-side, rgba(255,255,255,0.6), rgba(255,255,255,0.2) 55%, transparent 75%)",
             }}
           />
           <div
@@ -161,48 +198,54 @@ export default function Home() {
               height: "700px",
               transform: "translateY(38%)",
               background:
-                "radial-gradient(circle at 50% 42%, rgba(244,243,240,0.22), rgba(244,243,240,0.05) 45%, rgba(5,1,14,0) 68%)",
+                "radial-gradient(circle at 50% 42%, rgba(244,243,240,0.16), rgba(244,243,240,0.04) 45%, rgba(5,1,14,0) 68%)",
             }}
           />
           <div className="relative h-[420px] w-[420px] translate-y-[38%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
-            {orbitRings.map((ring) => {
-              const counterClass = ring.direction === "cw" ? "orbit-ccw" : "orbit-cw";
-              const ringClass = ring.direction === "cw" ? "orbit-cw" : "orbit-ccw";
-              return (
-                <div
-                  key={ring.id}
-                  className={`absolute inset-0 ${ringClass}`}
-                  style={{ animationDuration: `${ring.duration}s` }}
+            <svg viewBox="0 0 200 200" className="h-full w-full overflow-visible">
+              {networkNodes.map((node) => (
+                <line
+                  key={`line-${node.name}`}
+                  x1={100}
+                  y1={100}
+                  x2={node.x}
+                  y2={node.y}
+                  stroke="rgba(244,243,240,0.22)"
+                  strokeWidth={0.4}
+                />
+              ))}
+
+              {networkNodes.map((node) => (
+                <foreignObject
+                  key={node.name}
+                  x={node.x - node.size / 2}
+                  y={node.y - node.size / 2}
+                  width={node.size}
+                  height={node.size}
                 >
-                  {ring.apps.map((app, i) => {
-                    const angle = (360 / ring.apps.length) * i;
-                    return (
-                      <div
-                        key={app.name}
-                        className="absolute left-1/2 top-1/2"
-                        style={{
-                          transform: `rotate(${angle}deg) translateX(${ring.radius})`,
-                        }}
-                      >
-                        <div
-                          className={counterClass}
-                          style={{ animationDuration: `${ring.duration}s` }}
-                        >
-                          <div style={{ transform: `rotate(${-angle}deg)` }}>
-                            <div
-                              title={app.name}
-                              className="liquid-glass flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-[9px] font-semibold text-foreground shadow-[0_0_16px_rgba(255,255,255,0.18)] backdrop-blur-md sm:h-11 sm:w-11 sm:text-[10px]"
-                            >
-                              {app.tag}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <div
+                    title={node.name}
+                    className="liquid-glass flex h-full w-full items-center justify-center rounded-full border border-white/25 bg-[#0a0714]/80 text-foreground/90 shadow-[0_0_10px_rgba(255,255,255,0.15)]"
+                  >
+                    <AppIcon kind={node.icon} />
+                  </div>
+                </foreignObject>
+              ))}
+
+              <foreignObject x={82} y={82} width={36} height={36}>
+                <div className="flex h-full w-full items-center justify-center rounded-full border border-white/40 bg-[#0a0714] shadow-[0_0_30px_rgba(255,255,255,0.35)]">
+                  <div className="relative h-[70%] w-[70%]">
+                    <Image
+                      src="/brand/logo-mark.png"
+                      alt="HeyYarvis"
+                      fill
+                      sizes="120px"
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
-              );
-            })}
+              </foreignObject>
+            </svg>
           </div>
         </div>
 
