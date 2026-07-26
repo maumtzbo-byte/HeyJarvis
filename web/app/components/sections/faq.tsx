@@ -3,7 +3,7 @@ import { faqs } from "../../content/site-content";
 
 export function Faq() {
   return (
-    <section className="border-t border-border/80">
+    <section className="section-divider">
       <div className="mx-auto max-w-3xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -13,7 +13,7 @@ export function Faq() {
             style={{ fontFamily: "var(--font-display)" }}
             className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl"
           >
-            What you&rsquo;re probably wondering
+            What you&rsquo;re probably <span className="italic font-light text-muted">wondering</span>
           </h2>
         </Reveal>
 

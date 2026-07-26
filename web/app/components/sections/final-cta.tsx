@@ -4,7 +4,7 @@ import { githubUrl } from "../../content/site-content";
 
 export function FinalCta() {
   return (
-    <section className="border-t border-border/80">
+    <section className="section-divider section-glow-warm">
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-24 text-center">
         <Reveal>
           <h2

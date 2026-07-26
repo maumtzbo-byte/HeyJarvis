@@ -4,7 +4,7 @@ import { roadmapPhases } from "../../content/site-content";
 
 export function Roadmap() {
   return (
-    <section className="border-t border-border/80">
+    <section className="section-divider section-glow-cool">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -14,7 +14,7 @@ export function Roadmap() {
             style={{ fontFamily: "var(--font-display)" }}
             className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl"
           >
-            Where we&rsquo;re headed
+            Where we&rsquo;re <span className="italic font-light text-muted">headed</span>
           </h2>
         </Reveal>
 

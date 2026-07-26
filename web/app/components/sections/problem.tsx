@@ -3,7 +3,7 @@ import { painPoints } from "../../content/site-content";
 
 export function Problem() {
   return (
-    <section className="border-t border-border/80">
+    <section className="section-divider">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -29,7 +29,7 @@ export function Problem() {
           {painPoints.map((point) => (
             <RevealItem
               key={point.title}
-              className="rounded-2xl border border-border p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20"
+              className="card-hover-neutral rounded-2xl border border-border p-6"
             >
               <h3 className="text-base font-semibold">{point.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">

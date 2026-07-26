@@ -3,7 +3,7 @@ import { steps } from "../../content/site-content";
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="border-t border-border/80">
+    <section id="how-it-works" className="section-divider section-glow-warm">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -13,7 +13,7 @@ export function HowItWorks() {
             style={{ fontFamily: "var(--font-display)" }}
             className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl"
           >
-            How it works
+            How it <span className="italic font-light text-muted">works</span>
           </h2>
         </Reveal>
 
@@ -21,7 +21,7 @@ export function HowItWorks() {
           {steps.map((step, index) => (
             <RevealItem
               key={step.title}
-              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-warm/40"
+              className="card-hover-warm group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-surface p-6"
             >
               <span className="font-mono text-2xl font-medium text-accent-warm/70">
                 {String(index + 1).padStart(2, "0")}

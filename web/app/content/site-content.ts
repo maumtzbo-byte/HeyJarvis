@@ -145,21 +145,28 @@ export const features: {
   },
 ];
 
-export const personas = [
+export const personas: {
+  title: string;
+  description: string;
+  icon: "graduationCap" | "briefcase" | "userCheck";
+}[] = [
   {
     title: "Students",
     description:
       "Save due dates, ideas for assignments, and what your professor said, all with your voice.",
+    icon: "graduationCap",
   },
   {
     title: "Professionals",
     description:
       "Remember commitments, meeting decisions, and to-dos without writing anything down.",
+    icon: "briefcase",
   },
   {
     title: "Anyone who forgets things",
     description:
       "If you've ever been late or forgotten something important because you didn't write it down, this is for you.",
+    icon: "userCheck",
   },
 ];
 
@@ -272,3 +279,9 @@ export const roadmapPhases: RoadmapPhase[] = [
 ];
 
 export const techStack = ["Claude", "Supabase", "ChromaDB", "FastAPI", "Next.js", "Vercel"];
+
+export const demoConversation = {
+  prompt: "Hey Siri, ask Yarvis when I'm meeting Carlos.",
+  response:
+    "Your meeting with Carlos is Thursday at 3pm — you also asked him to bring the slides.",
+};

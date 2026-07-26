@@ -154,3 +154,101 @@ body {
     animation: none;
   }
 }
+
+/* Section rhythm: a soft fade line instead of a flat solid border between sections */
+.section-divider {
+  position: relative;
+}
+
+.section-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1120px, 92%);
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Ambient section tint: warm = voice/human sections, cool = memory/digital sections.
+   Kept faint on purpose — atmosphere, not decoration. */
+.section-glow-warm,
+.section-glow-cool {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-glow-warm::after,
+.section-glow-cool::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.section-glow-warm::after {
+  background: radial-gradient(
+    780px circle at 50% 0%,
+    rgba(217, 164, 65, 0.07),
+    transparent 65%
+  );
+}
+
+.section-glow-cool::after {
+  background: radial-gradient(
+    780px circle at 50% 0%,
+    rgba(128, 115, 232, 0.07),
+    transparent 65%
+  );
+}
+
+/* Shared card hover treatment: lift + border glow tied to the card's semantic accent */
+.card-hover-warm,
+.card-hover-cool,
+.card-hover-neutral {
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background-color 0.35s ease;
+}
+
+.card-hover-warm:hover {
+  transform: translateY(-4px);
+  border-color: rgba(217, 164, 65, 0.4);
+  box-shadow: 0 24px 48px -30px rgba(217, 164, 65, 0.55);
+}
+
+.card-hover-cool:hover {
+  transform: translateY(-4px);
+  border-color: rgba(128, 115, 232, 0.4);
+  box-shadow: 0 24px 48px -30px rgba(128, 115, 232, 0.55);
+}
+
+.card-hover-neutral:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245, 244, 240, 0.2);
+  box-shadow: 0 24px 48px -30px rgba(245, 244, 240, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover-warm,
+  .card-hover-cool,
+  .card-hover-neutral {
+    transition: border-color 0.35s ease, background-color 0.35s ease;
+  }
+
+  .card-hover-warm:hover,
+  .card-hover-cool:hover,
+  .card-hover-neutral:hover {
+    transform: none;
+  }
+}

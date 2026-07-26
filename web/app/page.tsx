@@ -1,6 +1,7 @@
 import { Hero } from "./components/sections/hero";
 import { Problem } from "./components/sections/problem";
 import { HowItWorks } from "./components/sections/how-it-works";
+import { ProductDemo } from "./components/sections/product-demo";
 import { Features } from "./components/sections/features";
 import { BuildingInPublic } from "./components/sections/building-in-public";
 import { Roadmap } from "./components/sections/roadmap";
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <HowItWorks />
+      <ProductDemo />
       <Features />
       <BuildingInPublic />
       <Roadmap />

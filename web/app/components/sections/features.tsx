@@ -13,7 +13,7 @@ const iconMap: Record<(typeof features)[number]["icon"], LucideIcon> = {
 
 export function Features() {
   return (
-    <section id="why-heyyarvis" className="border-t border-border/80">
+    <section id="why-heyyarvis" className="section-divider section-glow-cool">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -23,7 +23,7 @@ export function Features() {
             style={{ fontFamily: "var(--font-display)" }}
             className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl"
           >
-            Why HeyYarvis
+            <span className="italic font-light text-muted">Why</span> HeyYarvis
           </h2>
         </Reveal>
 
@@ -34,12 +34,20 @@ export function Features() {
             return (
               <RevealItem
                 key={feature.title}
-                className="flex flex-col gap-3 rounded-2xl border border-border p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:bg-surface/60"
+                className={`${isVoice ? "card-hover-warm" : "card-hover-cool"} flex flex-col gap-3 rounded-2xl border border-border p-6`}
               >
-                <Icon
-                  className={`h-5 w-5 ${isVoice ? "text-accent-warm" : "text-accent-cool"}`}
-                  strokeWidth={1.75}
-                />
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl ring-1 ${
+                    isVoice
+                      ? "bg-gradient-to-br from-accent-warm/15 to-transparent ring-accent-warm/20"
+                      : "bg-gradient-to-br from-accent-cool/15 to-transparent ring-accent-cool/20"
+                  }`}
+                >
+                  <Icon
+                    className={`h-5 w-5 ${isVoice ? "text-accent-warm" : "text-accent-cool"}`}
+                    strokeWidth={1.75}
+                  />
+                </div>
                 <h3 className="text-base font-semibold">{feature.title}</h3>
                 <p className="text-sm leading-relaxed text-muted">
                   {feature.description}

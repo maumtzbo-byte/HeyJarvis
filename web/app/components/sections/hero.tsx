@@ -15,7 +15,7 @@ const cardPositions = [
 
 export function Hero() {
   return (
-    <section className="relative flex flex-col overflow-hidden pb-14 pt-16 sm:pt-20">
+    <section className="section-glow-warm relative flex flex-col overflow-hidden pb-14 pt-16 sm:pt-20">
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
         <Reveal>
           <span className="rounded-full liquid-glass bg-background/60 px-3 py-1 text-xs font-medium text-muted">

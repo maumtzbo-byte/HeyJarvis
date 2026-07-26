@@ -6,7 +6,7 @@ const marqueeStack = [...techStack, ...techStack];
 
 export function BuildingInPublic() {
   return (
-    <section className="border-t border-border/80">
+    <section className="section-divider">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
