@@ -1,17 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "./components/site-header";
 import SiteFooter from "./components/site-footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fraunces = Fraunces({
   subsets: ["latin"],
+  variable: "--font-fraunces",
+  style: ["normal", "italic"],
+  weight: "variable",
+  axes: ["opsz"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
 });
 
 export const metadata: Metadata = {
@@ -28,14 +37,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
-        />
-      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <SiteHeader />
         <div className="relative z-10 flex flex-1 flex-col">{children}</div>

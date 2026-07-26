@@ -1,23 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const columns = [
-  {
-    title: "Product",
-    links: [
-      { label: "How it works", href: "/#how-it-works" },
-      { label: "Why HeyYarvis", href: "/#why-heyyarvis" },
-      { label: "My memories", href: "/dashboard" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Code on GitHub", href: "https://github.com/maumtzbo-byte/HeyJarvis" },
-      { label: "Project README", href: "https://github.com/maumtzbo-byte/HeyJarvis#readme" },
-    ],
-  },
-];
+import { footerColumns } from "../content/site-content";
 
 export default function SiteFooter() {
   return (
@@ -33,7 +16,12 @@ export default function SiteFooter() {
                 height={22}
                 className="rounded-full"
               />
-              <span className="text-sm font-semibold text-foreground">HeyYarvis</span>
+              <span
+                style={{ fontFamily: "var(--font-display)" }}
+                className="text-sm font-semibold text-foreground"
+              >
+                HeyYarvis
+              </span>
             </div>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
               Your second brain, accessible by voice. Currently in private
@@ -41,7 +29,7 @@ export default function SiteFooter() {
             </p>
           </div>
 
-          {columns.map((column) => (
+          {footerColumns.map((column) => (
             <div key={column.title} className="flex flex-col gap-3">
               <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted/70">
                 {column.title}
