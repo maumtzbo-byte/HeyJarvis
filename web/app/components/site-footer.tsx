@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-border/80">
+    <footer className="relative z-10 border-t border-border/80 bg-background">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <Image
