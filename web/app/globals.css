@@ -93,8 +93,8 @@ body {
   border-color: rgba(244, 243, 240, 0.35);
 }
 
-/* --- Hero orb: two independent, perfectly-looping motions composed together --- */
-@keyframes orb-spin {
+/* --- App orbit: concentric rings rotate; each item counter-rotates so it stays upright --- */
+@keyframes orbit-cw {
   from {
     transform: rotate(0deg);
   }
@@ -103,14 +103,25 @@ body {
   }
 }
 
-@keyframes orb-breathe {
-  0%,
-  100% {
-    transform: scale(1);
+@keyframes orbit-ccw {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    transform: scale(1.05);
+  to {
+    transform: rotate(-360deg);
   }
+}
+
+.orbit-cw {
+  animation-name: orbit-cw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.orbit-ccw {
+  animation-name: orbit-ccw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @keyframes glow-pulse {
@@ -143,16 +154,6 @@ body {
   }
 }
 
-.orb-breathe {
-  animation: orb-breathe 6s ease-in-out infinite;
-  will-change: transform;
-}
-
-.orb-spin {
-  animation: orb-spin 22s linear infinite;
-  will-change: transform;
-}
-
 .animate-glow-pulse {
   animation: glow-pulse 6s ease-in-out infinite;
   will-change: opacity;
@@ -167,8 +168,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb-breathe,
-  .orb-spin,
+  .orbit-cw,
+  .orbit-ccw,
   .animate-glow-pulse,
   .animate-marquee,
   .animate-fade-up {

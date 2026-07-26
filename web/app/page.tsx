@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const steps = [
@@ -39,6 +38,66 @@ const features = [
 
 const stack = ["Claude", "Supabase", "ChromaDB", "FastAPI", "Next.js", "Vercel"];
 const marqueeStack = [...stack, ...stack];
+
+type OrbitDirection = "cw" | "ccw";
+
+const orbitRings: {
+  id: string;
+  radius: string;
+  duration: number;
+  direction: OrbitDirection;
+  apps: { name: string; tag: string }[];
+}[] = [
+  {
+    id: "inner",
+    radius: "clamp(85px, 12vw, 175px)",
+    duration: 34,
+    direction: "cw",
+    apps: [
+      { name: "Notion", tag: "No" },
+      { name: "Slack", tag: "Sl" },
+      { name: "Gmail", tag: "Gm" },
+      { name: "Todoist", tag: "Td" },
+      { name: "Trello", tag: "Tr" },
+      { name: "Asana", tag: "As" },
+      { name: "ClickUp", tag: "Cu" },
+      { name: "Calendario", tag: "Ca" },
+    ],
+  },
+  {
+    id: "middle",
+    radius: "clamp(140px, 19vw, 265px)",
+    duration: 50,
+    direction: "ccw",
+    apps: [
+      { name: "WhatsApp", tag: "Wa" },
+      { name: "Telegram", tag: "Tg" },
+      { name: "Outlook", tag: "Ou" },
+      { name: "Google Classroom", tag: "Cr" },
+      { name: "Canvas", tag: "Cv" },
+      { name: "Whoop", tag: "Wh" },
+      { name: "Apple Health", tag: "He" },
+      { name: "Plaid", tag: "Pl" },
+      { name: "Maps", tag: "Mp" },
+      { name: "Drive", tag: "Dr" },
+    ],
+  },
+  {
+    id: "outer",
+    radius: "clamp(190px, 26vw, 345px)",
+    duration: 66,
+    direction: "cw",
+    apps: [
+      { name: "Uber", tag: "Ub" },
+      { name: "Lyft", tag: "Ly" },
+      { name: "Dropbox", tag: "Db" },
+      { name: "LinkedIn", tag: "In" },
+      { name: "Zapier", tag: "Za" },
+      { name: "Make", tag: "Mk" },
+      { name: "Amazon", tag: "Am" },
+    ],
+  },
+];
 
 export default function Home() {
   return (
@@ -83,31 +142,67 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Rising-planet orb: massive, anchored to the bottom edge, cut off by the section frame */}
+        {/* Rising-planet orbit: same silhouette as before, now built from the apps HeyYarvis connects to */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center"
         >
           <div
-            className="animate-glow-pulse absolute bottom-0 h-[360px] w-[640px] -translate-y-[10%] rounded-full opacity-60 blur-[90px] sm:h-[460px] sm:w-[860px]"
+            className="animate-glow-pulse absolute bottom-0 h-[420px] w-[700px] -translate-y-[6%] rounded-full opacity-70 blur-[100px] sm:h-[560px] sm:w-[960px]"
             style={{
               background:
-                "radial-gradient(closest-side, rgba(255,255,255,0.55), rgba(255,255,255,0.18) 55%, transparent 75%)",
+                "radial-gradient(closest-side, rgba(255,255,255,0.65), rgba(255,255,255,0.22) 55%, transparent 75%)",
             }}
           />
-          <div className="relative h-[420px] w-[420px] translate-y-[42%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
-            <div className="orb-breathe absolute inset-0">
-              <div className="orb-spin absolute inset-0">
-                <Image
-                  src="/brand/hero-orb.png"
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 760px, (min-width: 640px) 640px, 420px"
-                  priority
-                  className="object-contain"
-                />
-              </div>
-            </div>
+          <div
+            className="absolute bottom-0 rounded-full"
+            style={{
+              width: "700px",
+              height: "700px",
+              transform: "translateY(38%)",
+              background:
+                "radial-gradient(circle at 50% 42%, rgba(244,243,240,0.22), rgba(244,243,240,0.05) 45%, rgba(5,1,14,0) 68%)",
+            }}
+          />
+          <div className="relative h-[420px] w-[420px] translate-y-[38%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
+            {orbitRings.map((ring) => {
+              const counterClass = ring.direction === "cw" ? "orbit-ccw" : "orbit-cw";
+              const ringClass = ring.direction === "cw" ? "orbit-cw" : "orbit-ccw";
+              return (
+                <div
+                  key={ring.id}
+                  className={`absolute inset-0 ${ringClass}`}
+                  style={{ animationDuration: `${ring.duration}s` }}
+                >
+                  {ring.apps.map((app, i) => {
+                    const angle = (360 / ring.apps.length) * i;
+                    return (
+                      <div
+                        key={app.name}
+                        className="absolute left-1/2 top-1/2"
+                        style={{
+                          transform: `rotate(${angle}deg) translateX(${ring.radius})`,
+                        }}
+                      >
+                        <div
+                          className={counterClass}
+                          style={{ animationDuration: `${ring.duration}s` }}
+                        >
+                          <div style={{ transform: `rotate(${-angle}deg)` }}>
+                            <div
+                              title={app.name}
+                              className="liquid-glass flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-[9px] font-semibold text-foreground shadow-[0_0_16px_rgba(255,255,255,0.18)] backdrop-blur-md sm:h-11 sm:w-11 sm:text-[10px]"
+                            >
+                              {app.tag}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -181,9 +276,10 @@ export default function Home() {
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-16 text-sm text-muted">
           <p>
-            HeyYarvis está en fase de validación: por ahora se usa a través
-            de Atajos de Siri conectados directamente a la API, sin
-            integraciones con Gmail, WhatsApp o Notion todavía.
+            HeyYarvis está en fase de validación: hoy funciona a través de
+            Atajos de Siri conectados directamente a la API. Las integraciones
+            directas con apps como Notion, Gmail o WhatsApp son parte de la
+            visión del producto y todavía están en camino.
           </p>
         </div>
       </section>
