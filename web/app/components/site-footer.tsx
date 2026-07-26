@@ -6,7 +6,7 @@ export default function SiteFooter() {
   return (
     <footer className="relative z-10 border-t border-border/80 bg-background">
       <div className="mx-auto max-w-5xl px-6 py-14">
-        <div className="grid gap-10 sm:grid-cols-[1.3fr_1fr_1fr]">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <Image
