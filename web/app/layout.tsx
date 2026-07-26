@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { ScrollProgress } from "./components/scroll-progress";
 
 const siteUrl = "https://hey-jarvis-psi.vercel.app";
 const title = "HeyYarvis — Your second brain, accessible by voice";
@@ -57,7 +56,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <div aria-hidden className="grain-overlay" />
-        <ScrollProgress />
         {children}
       </body>
     </html>
