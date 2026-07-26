@@ -222,8 +222,8 @@ const networkNodes = [
 export default function Home() {
   return (
     <main className="relative z-10 flex flex-1 flex-col">
-      <section className="relative flex min-h-[calc(100svh-73px)] flex-col overflow-hidden">
-        <div className="relative z-10 flex flex-col items-center px-6 pt-16 text-center sm:pt-20">
+      <section className="relative flex flex-col overflow-hidden pb-14 pt-16 sm:pt-20">
+        <div className="relative z-10 flex flex-col items-center px-6 text-center">
           <span
             className="animate-fade-up rounded-full liquid-glass bg-background/60 px-3 py-1 text-xs font-medium text-muted"
             style={{ animationDelay: "0ms" }}
@@ -263,32 +263,20 @@ export default function Home() {
         </div>
 
         {/* Network: HeyYarvis at the hub, every connected app as a node, lines converging to the center.
-            Every layer is centered with left-1/2 + translateX(-50%) — the one centering technique that
-            behaves identically across browsers, since Safari does not center absolutely positioned
-            children of a flex container the way Chromium does. */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-0">
+            Rendered in normal document flow (not absolutely positioned) so it can never overlap the
+            content above or below it, regardless of viewport height or browser. */}
+        <div
+          aria-hidden
+          className="pointer-events-none relative mx-auto mt-10 h-[280px] w-[280px] shrink-0 sm:mt-14 sm:h-[440px] sm:w-[440px] lg:h-[560px] lg:w-[560px]"
+        >
           <div
-            className="animate-glow-pulse absolute left-1/2 bottom-0 h-[300px] w-[440px] rounded-full opacity-60 blur-[80px] sm:h-[460px] sm:w-[820px] sm:blur-[100px] lg:h-[560px] lg:w-[960px]"
+            className="animate-glow-pulse absolute inset-0 -z-10 rounded-full opacity-70 blur-[70px] sm:blur-[110px]"
             style={{
-              transform: "translate(-50%, -6%)",
               background:
-                "radial-gradient(closest-side, rgba(255,255,255,0.6), rgba(255,255,255,0.2) 55%, transparent 75%)",
+                "radial-gradient(closest-side, rgba(255,255,255,0.55), rgba(255,255,255,0.16) 55%, transparent 75%)",
             }}
           />
-          <div
-            className="absolute left-1/2 bottom-0 rounded-full"
-            style={{
-              transform: "translate(-50%, 38%)",
-              width: "min(90vw, 700px)",
-              height: "min(90vw, 700px)",
-              background:
-                "radial-gradient(circle at 50% 42%, rgba(244,243,240,0.16), rgba(244,243,240,0.04) 45%, rgba(5,1,14,0) 68%)",
-            }}
-          />
-          <div
-            className="absolute left-1/2 bottom-0 h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] lg:h-[720px] lg:w-[720px]"
-            style={{ transform: "translate(-50%, 38%)" }}
-          >
+          <div className="animate-network-breathe h-full w-full">
             <svg viewBox="0 0 200 200" className="h-full w-full overflow-visible">
               {networkNodes.map((node) => (
                 <line
@@ -336,7 +324,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto mt-auto w-full max-w-5xl px-6 pb-10">
+        <div className="relative z-10 mx-auto mt-10 w-full max-w-5xl px-6 sm:mt-14">
           <div className="mx-auto w-full max-w-xl overflow-hidden rounded-full border border-white/10 bg-background/90 px-6 py-3 shadow-[0_8px_40px_-8px_rgba(0,0,0,0.8)] backdrop-blur-xl [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
             <div className="flex w-max animate-marquee items-center gap-10">
               {marqueeStack.map((name, index) => (
