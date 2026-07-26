@@ -1,6 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const painPoints = [
+  {
+    title: "Se te olvida",
+    description:
+      "Las cosas importantes se pierden entre notas, chats y apps que nunca volvés a abrir.",
+  },
+  {
+    title: "Está todo separado",
+    description:
+      "Tu vida no vive en un solo lugar, pero tu memoria sí debería estar en uno.",
+  },
+  {
+    title: "Los asistentes no recuerdan",
+    description:
+      "Siri te responde, pero no aprende. Cada pregunta vuelve a empezar de cero.",
+  },
+];
+
 const steps = [
   {
     title: "Le hablás a Siri",
@@ -34,6 +52,69 @@ const features = [
     title: "Tus datos, tu memoria",
     description:
       "Cada recuerdo queda asociado a tu usuario. Nada se comparte ni se mezcla entre personas.",
+  },
+  {
+    title: "Búsqueda por significado",
+    description:
+      "No necesitás la palabra exacta: HeyYarvis entiende qué buscás y encuentra el recuerdo correcto.",
+  },
+  {
+    title: "Funciona con lo que ya usás",
+    description:
+      "Se activa con Siri, sin apps nuevas que instalar ni pantallas que mirar.",
+  },
+  {
+    title: "Respuestas simples",
+    description:
+      "Nada de párrafos largos: contestaciones cortas, pensadas para escuchar mientras hacés otra cosa.",
+  },
+];
+
+const personas = [
+  {
+    title: "Estudiantes",
+    description:
+      "Guardá fechas de entrega, ideas para trabajos y lo que dijo el profesor, todo con la voz.",
+  },
+  {
+    title: "Profesionales",
+    description:
+      "Recordá compromisos, decisiones de reuniones y pendientes sin tener que anotar nada a mano.",
+  },
+  {
+    title: "Quien se olvida de todo",
+    description:
+      "Si alguna vez llegaste tarde o te olvidaste algo importante por no anotarlo, esto es para vos.",
+  },
+];
+
+const privacyPoints = [
+  "Cada recuerdo está asociado únicamente a tu usuario.",
+  "Nada se comparte entre personas ni se usa para entrenar modelos de terceros.",
+  "Los datos viven en una base con cifrado en reposo, no en una nota suelta.",
+  "Podés pedir que se borre tu información en cualquier momento.",
+];
+
+const faqs = [
+  {
+    q: "¿Necesito instalar una app?",
+    a: "No. Por ahora todo funciona con Atajos de Siri, sin instalar nada nuevo en tu iPhone.",
+  },
+  {
+    q: "¿Qué pasa si le pido algo que nunca le conté?",
+    a: "HeyYarvis te lo dice: no inventa información que no tiene guardada.",
+  },
+  {
+    q: "¿Puedo borrar mis recuerdos?",
+    a: "Sí, cuando quieras. Son tuyos.",
+  },
+  {
+    q: "¿Cuándo van a estar las integraciones con Notion, Gmail o WhatsApp?",
+    a: "Es el siguiente paso del roadmap. Hoy el foco es que la memoria por voz funcione perfecto antes de sumar conexiones.",
+  },
+  {
+    q: "¿Es gratis?",
+    a: "HeyYarvis está en fase de validación privada: acceso limitado y sin costo para quienes lo están probando.",
   },
 ];
 
@@ -73,7 +154,7 @@ const iconPaths: Record<IconKind, string> = {
   box: "M3 6.2 10 3l7 3.2-7 3.2-7-3.2Zm0 0v8.6l7 3.2 7-3.2V6.2M10 9.6v9",
 };
 
-function AppIcon({ kind }: { kind: IconKind }) {
+function AppIcon({ kind, className = "h-[52%] w-[52%]" }: { kind: IconKind; className?: string }) {
   return (
     <svg
       viewBox="0 0 20 20"
@@ -82,7 +163,7 @@ function AppIcon({ kind }: { kind: IconKind }) {
       strokeWidth={1.4}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-[52%] w-[52%]"
+      className={className}
     >
       <path d={iconPaths[kind]} />
     </svg>
@@ -121,6 +202,8 @@ const outerRingApps: OrbitApp[] = [
   { name: "Make", icon: "zap" },
   { name: "Amazon", icon: "box" },
 ];
+
+const allConnectedApps: OrbitApp[] = [...innerRingApps, ...outerRingApps];
 
 function ringPositions(count: number, radius: number) {
   return Array.from({ length: count }, (_, i) => {
@@ -179,29 +262,33 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Network: HeyYarvis at the hub, every connected app as a node, lines converging to the center */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center"
-        >
+        {/* Network: HeyYarvis at the hub, every connected app as a node, lines converging to the center.
+            Every layer is centered with left-1/2 + translateX(-50%) — the one centering technique that
+            behaves identically across browsers, since Safari does not center absolutely positioned
+            children of a flex container the way Chromium does. */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-0">
           <div
-            className="animate-glow-pulse absolute bottom-0 h-[420px] w-[700px] -translate-y-[6%] rounded-full opacity-60 blur-[100px] sm:h-[560px] sm:w-[960px]"
+            className="animate-glow-pulse absolute left-1/2 bottom-0 h-[300px] w-[440px] rounded-full opacity-60 blur-[80px] sm:h-[460px] sm:w-[820px] sm:blur-[100px] lg:h-[560px] lg:w-[960px]"
             style={{
+              transform: "translate(-50%, -6%)",
               background:
                 "radial-gradient(closest-side, rgba(255,255,255,0.6), rgba(255,255,255,0.2) 55%, transparent 75%)",
             }}
           />
           <div
-            className="absolute bottom-0 rounded-full"
+            className="absolute left-1/2 bottom-0 rounded-full"
             style={{
-              width: "700px",
-              height: "700px",
-              transform: "translateY(38%)",
+              transform: "translate(-50%, 38%)",
+              width: "min(90vw, 700px)",
+              height: "min(90vw, 700px)",
               background:
                 "radial-gradient(circle at 50% 42%, rgba(244,243,240,0.16), rgba(244,243,240,0.04) 45%, rgba(5,1,14,0) 68%)",
             }}
           />
-          <div className="relative h-[420px] w-[420px] translate-y-[38%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
+          <div
+            className="absolute left-1/2 bottom-0 h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] lg:h-[720px] lg:w-[720px]"
+            style={{ transform: "translate(-50%, 38%)" }}
+          >
             <svg viewBox="0 0 200 200" className="h-full w-full overflow-visible">
               {networkNodes.map((node) => (
                 <line
@@ -265,6 +352,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Problema */}
+      <section className="border-t border-border/80">
+        <div className="mx-auto max-w-5xl px-6 py-24">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+            El problema
+          </p>
+          <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
+            No es que tengas mala memoria. Es que está repartida en 15 apps.
+          </h2>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+            Anotás en Notion, prometés en WhatsApp, agendás en el calendario…
+            y aun así se te escapa algo. HeyYarvis junta todo eso en un solo
+            lugar al que le podés hablar.
+          </p>
+          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+            {painPoints.map((point) => (
+              <div
+                key={point.title}
+                className="rounded-2xl border border-border p-6 transition-colors hover:border-foreground/20"
+              >
+                <h3 className="text-base font-semibold">{point.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {point.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cómo funciona */}
       <section id="como-funciona" className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
@@ -292,7 +410,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-border/80">
+      {/* Funciones */}
+      <section id="por-que" className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
             Diferencial
@@ -300,7 +419,7 @@ export default function Home() {
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
             Por qué HeyYarvis
           </h2>
-          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <div
                 key={feature.title}
@@ -316,14 +435,143 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Roadmap de integraciones */}
       <section className="border-t border-border/80">
-        <div className="mx-auto max-w-5xl px-6 py-16 text-sm text-muted">
-          <p>
-            HeyYarvis está en fase de validación: hoy funciona a través de
-            Atajos de Siri conectados directamente a la API. Las integraciones
-            directas con apps como Notion, Gmail o WhatsApp son parte de la
-            visión del producto y todavía están en camino.
+        <div className="mx-auto max-w-5xl px-6 py-24">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+            Roadmap
           </p>
+          <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
+            Hacia dónde vamos
+          </h2>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+            Hoy HeyYarvis funciona 100% por voz, a través de Atajos de Siri
+            conectados directamente a la API. El siguiente paso es conectarlo
+            directo con las apps que ya usás todos los días — todavía no está
+            construido, pero es el rumbo.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-2.5">
+            {allConnectedApps.map((app) => (
+              <span
+                key={app.name}
+                className="liquid-glass inline-flex items-center gap-2 rounded-full bg-surface/60 px-3.5 py-2 text-xs font-medium text-foreground/80"
+              >
+                <AppIcon kind={app.icon} className="h-3.5 w-3.5 text-foreground/60" />
+                {app.name}
+              </span>
+            ))}
+            <span className="inline-flex items-center rounded-full border border-dashed border-border px-3.5 py-2 text-xs font-medium text-muted/70">
+              y más...
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Para quién */}
+      <section className="border-t border-border/80">
+        <div className="mx-auto max-w-5xl px-6 py-24">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+            Para quién
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Pensado para gente ocupada
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+            {personas.map((persona) => (
+              <div
+                key={persona.title}
+                className="rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-foreground/20"
+              >
+                <h3 className="text-base font-semibold">{persona.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {persona.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Privacidad */}
+      <section className="border-t border-border/80">
+        <div className="mx-auto max-w-5xl px-6 py-24">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+                Privacidad
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+                Tu memoria es tuya
+              </h2>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+                Un producto que guarda lo que le contás tiene que ganarse tu
+                confianza. Así manejamos tus datos hoy.
+              </p>
+            </div>
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {privacyPoints.map((point) => (
+                <li
+                  key={point}
+                  className="flex items-start gap-3 rounded-2xl border border-border p-5 text-sm leading-relaxed text-muted"
+                >
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-foreground/50" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t border-border/80">
+        <div className="mx-auto max-w-3xl px-6 py-24">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+            Preguntas frecuentes
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Lo que seguro te estás preguntando
+          </h2>
+          <div className="mt-10 flex flex-col divide-y divide-border rounded-2xl border border-border">
+            {faqs.map((item) => (
+              <details key={item.q} className="group px-6 py-5 open:bg-surface/40">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium marker:content-none">
+                  {item.q}
+                  <span className="shrink-0 text-lg text-muted transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA final */}
+      <section className="border-t border-border/80">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-24 text-center">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Empezá a construir tu segundo cerebro
+          </h2>
+          <p className="max-w-md text-sm leading-relaxed text-muted">
+            HeyYarvis está en fase de validación privada. Probalo, guardá tus
+            primeros recuerdos y contanos qué te falta.
+          </p>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link
+              href="/dashboard"
+              className="btn-primary inline-flex h-12 items-center justify-center rounded-full px-[29px] text-sm font-medium"
+            >
+              Ver mis recuerdos
+            </Link>
+            <a
+              href="https://github.com/maumtzbo-byte/HeyJarvis"
+              className="btn-secondary inline-flex h-12 items-center justify-center rounded-full border border-border px-[29px] text-sm font-medium text-foreground/90"
+            >
+              Ver el código
+            </a>
+          </div>
         </div>
       </section>
     </main>
