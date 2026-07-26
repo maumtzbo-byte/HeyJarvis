@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const painPoints = [
@@ -309,15 +308,14 @@ export default function Home() {
 
               <foreignObject x={82} y={82} width={36} height={36}>
                 <div className="flex h-full w-full items-center justify-center rounded-full border border-white/40 bg-[#0a0714] shadow-[0_0_30px_rgba(255,255,255,0.35)]">
-                  <div className="relative h-[70%] w-[70%]">
-                    <Image
-                      src="/brand/logo-mark.png"
-                      alt="HeyYarvis"
-                      fill
-                      sizes="120px"
-                      className="object-contain"
-                    />
-                  </div>
+                  {/* Plain <img>, not next/image: next/image's `fill` (position:absolute + srcset)
+                      does not lay out reliably inside an SVG foreignObject on Safari. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/brand/logo-mark.png"
+                    alt="HeyYarvis"
+                    className="h-[70%] w-[70%] object-contain"
+                  />
                 </div>
               </foreignObject>
             </svg>
