@@ -19,18 +19,18 @@ export default function SiteHeader() {
           </span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-foreground/90 sm:flex">
-          <Link href="/#como-funciona" className="transition-opacity hover:opacity-70">
-            Cómo funciona
+          <Link href="/#how-it-works" className="transition-opacity hover:opacity-70">
+            How it works
           </Link>
           <Link href="/dashboard" className="transition-opacity hover:opacity-70">
-            Mis recuerdos
+            My memories
           </Link>
         </nav>
         <Link
           href="/dashboard"
           className="liquid-glass inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-foreground transition-opacity hover:opacity-80"
         >
-          Ver mis recuerdos
+          View my memories
         </Link>
       </div>
       <div className="mt-[3px] h-px w-full bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />

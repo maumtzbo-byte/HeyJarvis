@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HeyYarvis — Tu segundo cerebro, accesible por voz",
+  title: "HeyYarvis — Your second brain, accessible by voice",
   description:
-    "Hablale a Siri, HeyYarvis recuerda lo que le contás y te lo devuelve cuando lo necesitás.",
+    "Talk to Siri, HeyYarvis remembers what you tell it and gives it back when you need it.",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>

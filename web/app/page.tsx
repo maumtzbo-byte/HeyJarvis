@@ -3,118 +3,118 @@ import Link from "next/link";
 
 const painPoints = [
   {
-    title: "Se te olvida",
+    title: "You forget things",
     description:
-      "Las cosas importantes se pierden entre notas, chats y apps que nunca volvés a abrir.",
+      "Important things get lost between notes, chats, and apps you never open again.",
   },
   {
-    title: "Está todo separado",
+    title: "Everything's scattered",
     description:
-      "Tu vida no vive en un solo lugar, pero tu memoria sí debería estar en uno.",
+      "Your life doesn't live in one place, but your memory should.",
   },
   {
-    title: "Los asistentes no recuerdan",
+    title: "Voice assistants don't remember",
     description:
-      "Siri te responde, pero no aprende. Cada pregunta vuelve a empezar de cero.",
+      "Siri answers you, but doesn't learn. Every question starts from zero.",
   },
 ];
 
 const steps = [
   {
-    title: "Le hablás a Siri",
+    title: "You talk to Siri",
     description:
-      '"Oye Siri, recordá que mi reunión con Carlos es el jueves." HeyYarvis guarda lo que le contás.',
+      '"Hey Siri, remember my meeting with Carlos is on Thursday." HeyYarvis saves what you tell it.',
   },
   {
-    title: "Lo recuerda de verdad",
+    title: "It actually remembers",
     description:
-      "Cada recuerdo se resume y se guarda en una memoria vectorial propia, asociada solo a vos.",
+      "Every memory gets summarized and stored in its own vector memory, tied only to you.",
   },
   {
-    title: "Se lo preguntás cuando lo necesitás",
+    title: "You ask when you need it",
     description:
-      '"Oye Siri, pregúntale a Yarvis cuándo es mi reunión con Carlos." Te responde corto y claro.',
+      '"Hey Siri, ask Yarvis when my meeting with Carlos is." It answers short and clear.',
   },
 ];
 
 const features = [
   {
-    title: "Memoria persistente",
+    title: "Persistent memory",
     description:
-      "No es un chat que se olvida. Lo que le contás queda guardado y se recupera por relevancia, no por fecha.",
+      "It's not a chat that forgets. What you tell it stays saved and gets retrieved by relevance, not by date.",
   },
   {
-    title: "Pensado para voz",
+    title: "Built for voice",
     description:
-      "Las respuestas son cortas y naturales, listas para que Siri te las lea en voz alta.",
+      "Answers are short and natural, ready for Siri to read out loud.",
   },
   {
-    title: "Tus datos, tu memoria",
+    title: "Your data, your memory",
     description:
-      "Cada recuerdo queda asociado a tu usuario. Nada se comparte ni se mezcla entre personas.",
+      "Every memory is tied to your account. Nothing is shared or mixed between people.",
   },
   {
-    title: "Búsqueda por significado",
+    title: "Search by meaning",
     description:
-      "No necesitás la palabra exacta: HeyYarvis entiende qué buscás y encuentra el recuerdo correcto.",
+      "You don't need the exact words: HeyYarvis understands what you're looking for and finds the right memory.",
   },
   {
-    title: "Funciona con lo que ya usás",
+    title: "Works with what you already use",
     description:
-      "Se activa con Siri, sin apps nuevas que instalar ni pantallas que mirar.",
+      "It's triggered with Siri, no new apps to install or screens to look at.",
   },
   {
-    title: "Respuestas simples",
+    title: "Simple answers",
     description:
-      "Nada de párrafos largos: contestaciones cortas, pensadas para escuchar mientras hacés otra cosa.",
+      "No long paragraphs: short answers, made to be heard while you do something else.",
   },
 ];
 
 const personas = [
   {
-    title: "Estudiantes",
+    title: "Students",
     description:
-      "Guardá fechas de entrega, ideas para trabajos y lo que dijo el profesor, todo con la voz.",
+      "Save due dates, ideas for assignments, and what your professor said, all with your voice.",
   },
   {
-    title: "Profesionales",
+    title: "Professionals",
     description:
-      "Recordá compromisos, decisiones de reuniones y pendientes sin tener que anotar nada a mano.",
+      "Remember commitments, meeting decisions, and to-dos without writing anything down.",
   },
   {
-    title: "Quien se olvida de todo",
+    title: "Anyone who forgets things",
     description:
-      "Si alguna vez llegaste tarde o te olvidaste algo importante por no anotarlo, esto es para vos.",
+      "If you've ever been late or forgotten something important because you didn't write it down, this is for you.",
   },
 ];
 
 const privacyPoints = [
-  "Cada recuerdo está asociado únicamente a tu usuario.",
-  "Nada se comparte entre personas ni se usa para entrenar modelos de terceros.",
-  "Los datos viven en una base con cifrado en reposo, no en una nota suelta.",
-  "Podés pedir que se borre tu información en cualquier momento.",
+  "Every memory is tied only to your account.",
+  "Nothing is shared between people or used to train third-party models.",
+  "Data lives in a database with encryption at rest, not a loose note.",
+  "You can request your data be deleted at any time.",
 ];
 
 const faqs = [
   {
-    q: "¿Necesito instalar una app?",
-    a: "No. Por ahora todo funciona con Atajos de Siri, sin instalar nada nuevo en tu iPhone.",
+    q: "Do I need to install an app?",
+    a: "No. For now everything runs through Siri Shortcuts, nothing new to install on your iPhone.",
   },
   {
-    q: "¿Qué pasa si le pido algo que nunca le conté?",
-    a: "HeyYarvis te lo dice: no inventa información que no tiene guardada.",
+    q: "What happens if I ask about something I never told it?",
+    a: "HeyYarvis tells you: it doesn't make up information it doesn't have.",
   },
   {
-    q: "¿Puedo borrar mis recuerdos?",
-    a: "Sí, cuando quieras. Son tuyos.",
+    q: "Can I delete my memories?",
+    a: "Yes, anytime. They're yours.",
   },
   {
-    q: "¿Cuándo van a estar las integraciones con Notion, Gmail o WhatsApp?",
-    a: "Es el siguiente paso del roadmap. Hoy el foco es que la memoria por voz funcione perfecto antes de sumar conexiones.",
+    q: "When will integrations with Notion, Gmail, or WhatsApp be ready?",
+    a: "That's the next step on the roadmap. Right now the focus is making voice memory work perfectly before adding connections.",
   },
   {
-    q: "¿Es gratis?",
-    a: "HeyYarvis está en fase de validación privada: acceso limitado y sin costo para quienes lo están probando.",
+    q: "Is it free?",
+    a: "HeyYarvis is in private validation: limited access and free for those testing it.",
   },
 ];
 
@@ -228,7 +228,7 @@ export default function Home() {
             className="animate-fade-up rounded-full liquid-glass bg-background/60 px-3 py-1 text-xs font-medium text-muted"
             style={{ animationDelay: "0ms" }}
           >
-            Fase de validación privada
+            Private validation phase
           </span>
           <h1
             style={{ fontFamily: "var(--font-display)", animationDelay: "80ms" }}
@@ -240,8 +240,8 @@ export default function Home() {
             className="animate-fade-up mt-4 max-w-xs sm:max-w-md text-lg leading-8 text-muted opacity-80"
             style={{ animationDelay: "160ms" }}
           >
-            Tu segundo cerebro, que escucha y recuerda todo lo que le contás
-            por voz.
+            Your second brain, that listens and remembers everything you tell
+            it by voice.
           </p>
           <div
             className="animate-fade-up mt-7 flex flex-col gap-4 sm:flex-row"
@@ -251,13 +251,13 @@ export default function Home() {
               href="/dashboard"
               className="btn-primary inline-flex h-12 items-center justify-center rounded-full px-[29px] text-sm font-medium"
             >
-              Ver mis recuerdos
+              View my memories
             </Link>
             <a
               href="https://github.com/maumtzbo-byte/HeyJarvis"
               className="btn-secondary inline-flex h-12 items-center justify-center rounded-full border border-border px-[29px] text-sm font-medium text-foreground/90"
             >
-              Ver el código
+              View the code
             </a>
           </div>
         </div>
@@ -356,15 +356,16 @@ export default function Home() {
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-            El problema
+            The problem
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
-            No es que tengas mala memoria. Es que está repartida en 15 apps.
+            It's not that you have a bad memory. It's that it's scattered
+            across 15 apps.
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
-            Anotás en Notion, prometés en WhatsApp, agendás en el calendario…
-            y aun así se te escapa algo. HeyYarvis junta todo eso en un solo
-            lugar al que le podés hablar.
+            You jot things in Notion, promise things on WhatsApp, schedule in
+            your calendar… and something still slips through. HeyYarvis
+            brings it all into one place you can just talk to.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {painPoints.map((point) => (
@@ -382,14 +383,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Cómo funciona */}
-      <section id="como-funciona" className="border-t border-border/80">
+      {/* How it works */}
+      <section id="how-it-works" className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-            Proceso
+            Process
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Cómo funciona
+            How it works
           </h2>
           <ol className="mt-10 grid gap-5 sm:grid-cols-3">
             {steps.map((step, index) => (
@@ -410,14 +411,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Funciones */}
-      <section id="por-que" className="border-t border-border/80">
+      {/* Features */}
+      <section id="why-heyyarvis" className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-            Diferencial
+            Why us
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Por qué HeyYarvis
+            Why HeyYarvis
           </h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
@@ -435,20 +436,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Roadmap de integraciones */}
+      {/* Integrations roadmap */}
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
             Roadmap
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
-            Hacia dónde vamos
+            Where we're headed
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
-            Hoy HeyYarvis funciona 100% por voz, a través de Atajos de Siri
-            conectados directamente a la API. El siguiente paso es conectarlo
-            directo con las apps que ya usás todos los días — todavía no está
-            construido, pero es el rumbo.
+            Today HeyYarvis works 100% by voice, through Siri Shortcuts
+            connected directly to the API. The next step is connecting it
+            directly with the apps you already use every day — not built yet,
+            but that's the direction.
           </p>
           <div className="mt-10 flex flex-wrap gap-2.5">
             {allConnectedApps.map((app) => (
@@ -461,20 +462,20 @@ export default function Home() {
               </span>
             ))}
             <span className="inline-flex items-center rounded-full border border-dashed border-border px-3.5 py-2 text-xs font-medium text-muted/70">
-              y más...
+              and more...
             </span>
           </div>
         </div>
       </section>
 
-      {/* Para quién */}
+      {/* Who it's for */}
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-            Para quién
+            Who it's for
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Pensado para gente ocupada
+            Built for busy people
           </h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {personas.map((persona) => (
@@ -492,20 +493,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Privacidad */}
+      {/* Privacy */}
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-24">
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1fr] lg:items-start">
             <div>
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-                Privacidad
+                Privacy
               </p>
               <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-                Tu memoria es tuya
+                Your memory is yours
               </h2>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-                Un producto que guarda lo que le contás tiene que ganarse tu
-                confianza. Así manejamos tus datos hoy.
+                A product that stores what you tell it has to earn your
+                trust. Here's how we handle your data today.
               </p>
             </div>
             <ul className="grid gap-4 sm:grid-cols-2">
@@ -527,10 +528,10 @@ export default function Home() {
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-3xl px-6 py-24">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
-            Preguntas frecuentes
+            FAQ
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Lo que seguro te estás preguntando
+            What you're probably wondering
           </h2>
           <div className="mt-10 flex flex-col divide-y divide-border rounded-2xl border border-border">
             {faqs.map((item) => (
@@ -548,28 +549,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA final */}
+      {/* Final CTA */}
       <section className="border-t border-border/80">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-24 text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Empezá a construir tu segundo cerebro
+            Start building your second brain
           </h2>
           <p className="max-w-md text-sm leading-relaxed text-muted">
-            HeyYarvis está en fase de validación privada. Probalo, guardá tus
-            primeros recuerdos y contanos qué te falta.
+            HeyYarvis is in private validation. Try it, save your first
+            memories, and tell us what's missing.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
             <Link
               href="/dashboard"
               className="btn-primary inline-flex h-12 items-center justify-center rounded-full px-[29px] text-sm font-medium"
             >
-              Ver mis recuerdos
+              View my memories
             </Link>
             <a
               href="https://github.com/maumtzbo-byte/HeyJarvis"
               className="btn-secondary inline-flex h-12 items-center justify-center rounded-full border border-border px-[29px] text-sm font-medium text-foreground/90"
             >
-              Ver el código
+              View the code
             </a>
           </div>
         </div>

@@ -26,12 +26,12 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Lee valores guardados del navegador después del montaje: no puede
-    // hacerse en el initializer de useState porque el render inicial debe
-    // coincidir entre servidor y cliente para evitar un hydration mismatch.
+    // Reads stored values from the browser after mount: this can't happen in
+    // the useState initializer because the initial render must match between
+    // server and client to avoid a hydration mismatch.
     const storedApiUrl = window.localStorage.getItem(STORAGE_KEYS.apiUrl);
     const storedUserId = window.localStorage.getItem(STORAGE_KEYS.userId);
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza con localStorage tras el montaje
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs with localStorage after mount
     if (storedApiUrl) setApiUrl(storedApiUrl);
     if (storedUserId) setUserId(storedUserId);
   }, []);
@@ -39,7 +39,7 @@ export default function DashboardPage() {
   async function fetchMemories(event: FormEvent) {
     event.preventDefault();
     if (!userId.trim()) {
-      setError("Ingresá tu user_id.");
+      setError("Enter your user_id.");
       return;
     }
 
@@ -56,7 +56,7 @@ export default function DashboardPage() {
 
       if (!response.ok) {
         const body = await response.json().catch(() => null);
-        throw new Error(body?.detail ?? `Error ${response.status} al consultar la API`);
+        throw new Error(body?.detail ?? `Error ${response.status} calling the API`);
       }
 
       const data = await response.json();
@@ -69,7 +69,7 @@ export default function DashboardPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "No se pudo conectar con la API de HeyYarvis."
+          : "Could not connect to the HeyYarvis API."
       );
     } finally {
       setLoading(false);
@@ -80,10 +80,10 @@ export default function DashboardPage() {
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-16">
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Mis recuerdos
+          My memories
         </h1>
         <p className="text-sm text-muted">
-          Consultá los recuerdos guardados en tu cuenta de HeyYarvis.
+          Check the memories saved in your HeyYarvis account.
         </p>
       </div>
 
@@ -93,14 +93,14 @@ export default function DashboardPage() {
       >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="apiUrl" className="text-sm font-medium">
-            URL de la API
+            API URL
           </label>
           <input
             id="apiUrl"
             type="text"
             value={apiUrl}
             onChange={(event) => setApiUrl(event.target.value)}
-            placeholder="https://tu-backend.onrender.com"
+            placeholder="https://your-backend.onrender.com"
             className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent"
           />
         </div>
@@ -121,14 +121,14 @@ export default function DashboardPage() {
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="apiKey" className="text-sm font-medium">
-            API key <span className="text-muted">(opcional)</span>
+            API key <span className="text-muted">(optional)</span>
           </label>
           <input
             id="apiKey"
             type="password"
             value={apiKey}
             onChange={(event) => setApiKey(event.target.value)}
-            placeholder="Solo si el backend la exige"
+            placeholder="Only if the backend requires it"
             className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent"
             autoComplete="off"
           />
@@ -139,7 +139,7 @@ export default function DashboardPage() {
           disabled={loading}
           className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? "Buscando..." : "Ver recuerdos"}
+          {loading ? "Searching..." : "View memories"}
         </button>
       </form>
 
@@ -151,7 +151,7 @@ export default function DashboardPage() {
 
       {memories && memories.length === 0 && !error && (
         <p className="text-sm text-muted">
-          Todavía no hay recuerdos guardados para este usuario.
+          No memories saved for this user yet.
         </p>
       )}
 
@@ -165,7 +165,7 @@ export default function DashboardPage() {
               <p className="text-sm font-medium">{memory.summary}</p>
               <p className="mt-1 text-sm text-muted">{memory.text}</p>
               <p className="mt-2 text-xs text-muted/70">
-                {new Date(memory.created_at).toLocaleString("es-AR")}
+                {new Date(memory.created_at).toLocaleString("en-US")}
               </p>
             </li>
           ))}
