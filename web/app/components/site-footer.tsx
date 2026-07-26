@@ -12,7 +12,7 @@ export default function SiteFooter() {
             height={18}
             className="rounded-full opacity-80"
           />
-          <p>&copy; {new Date().getFullYear()} HeyJarvis. En fase de validación privada.</p>
+          <p>&copy; {new Date().getFullYear()} HeyYarvis. En fase de validación privada.</p>
         </div>
         <a
           href="https://github.com/maumtzbo-byte/HeyJarvis"

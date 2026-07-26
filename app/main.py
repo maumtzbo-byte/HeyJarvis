@@ -12,7 +12,7 @@ logging.basicConfig(
 )
 
 app = FastAPI(
-    title="HeyJarvis API",
+    title="HeyYarvis API",
     description="Segundo cerebro personal: memoria persistente accesible por voz (Siri).",
     version="0.1.0",
 )

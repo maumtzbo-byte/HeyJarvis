@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HeyJarvis — Tu segundo cerebro, accesible por voz",
+  title: "HeyYarvis — Tu segundo cerebro, accesible por voz",
   description:
-    "Hablale a Siri, HeyJarvis recuerda lo que le contás y te lo devuelve cuando lo necesitás.",
+    "Hablale a Siri, HeyYarvis recuerda lo que le contás y te lo devuelve cuando lo necesitás.",
 };
 
 export default function RootLayout({

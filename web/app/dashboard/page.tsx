@@ -69,7 +69,7 @@ export default function DashboardPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "No se pudo conectar con la API de HeyJarvis."
+          : "No se pudo conectar con la API de HeyYarvis."
       );
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ export default function DashboardPage() {
           Mis recuerdos
         </h1>
         <p className="text-sm text-muted">
-          Consultá los recuerdos guardados en tu cuenta de HeyJarvis.
+          Consultá los recuerdos guardados en tu cuenta de HeyYarvis.
         </p>
       </div>
 

@@ -8,14 +8,14 @@ export default function SiteHeader() {
         <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/brand/logo-mark.png"
-            alt="HeyJarvis"
+            alt="HeyYarvis"
             width={32}
             height={32}
             className="rounded-full"
             priority
           />
           <span className="text-base font-semibold tracking-tight">
-            HeyJarvis
+            HeyYarvis
           </span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-foreground/90 sm:flex">

@@ -5,7 +5,7 @@ const steps = [
   {
     title: "Le hablás a Siri",
     description:
-      '"Oye Siri, recordá que mi reunión con Carlos es el jueves." HeyJarvis guarda lo que le contás.',
+      '"Oye Siri, recordá que mi reunión con Carlos es el jueves." HeyYarvis guarda lo que le contás.',
   },
   {
     title: "Lo recuerda de verdad",
@@ -15,7 +15,7 @@ const steps = [
   {
     title: "Se lo preguntás cuando lo necesitás",
     description:
-      '"Oye Siri, pregúntale a Jarvis cuándo es mi reunión con Carlos." Te responde corto y claro.',
+      '"Oye Siri, pregúntale a Yarvis cuándo es mi reunión con Carlos." Te responde corto y claro.',
   },
 ];
 
@@ -55,16 +55,7 @@ export default function Home() {
             style={{ fontFamily: "var(--font-display)", animationDelay: "80ms" }}
             className="animate-fade-up mt-6 text-[46px] font-normal leading-[1.05] tracking-[-0.02em] sm:text-[68px] lg:text-[80px]"
           >
-            <span className="text-foreground">Hey </span>
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to left, #6366f1, #a855f7, #fcd34d)",
-              }}
-            >
-              Jarvis
-            </span>
+            <span className="text-foreground">Hey Yarvis</span>
           </h1>
           <p
             className="animate-fade-up mt-4 max-w-xs sm:max-w-md text-lg leading-8 text-muted opacity-80"
@@ -101,7 +92,7 @@ export default function Home() {
             className="animate-glow-pulse absolute bottom-0 h-[360px] w-[640px] -translate-y-[10%] rounded-full opacity-60 blur-[90px] sm:h-[460px] sm:w-[860px]"
             style={{
               background:
-                "radial-gradient(closest-side, rgba(255,255,255,0.6), rgba(139,130,255,0.28) 55%, transparent 75%)",
+                "radial-gradient(closest-side, rgba(255,255,255,0.55), rgba(255,255,255,0.18) 55%, transparent 75%)",
             }}
           />
           <div className="relative h-[420px] w-[420px] translate-y-[42%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
@@ -150,13 +141,7 @@ export default function Home() {
                 key={step.title}
                 className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-foreground/20"
               >
-                <span
-                  className="bg-clip-text text-2xl font-semibold text-transparent"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, #6366f1, #a855f7, #fcd34d)",
-                  }}
-                >
+                <span className="text-2xl font-semibold text-foreground/40">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="text-base font-semibold">{step.title}</h3>
@@ -175,7 +160,7 @@ export default function Home() {
             Diferencial
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Por qué HeyJarvis
+            Por qué HeyYarvis
           </h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {features.map((feature) => (
@@ -196,7 +181,7 @@ export default function Home() {
       <section className="border-t border-border/80">
         <div className="mx-auto max-w-5xl px-6 py-16 text-sm text-muted">
           <p>
-            HeyJarvis está en fase de validación: por ahora se usa a través
+            HeyYarvis está en fase de validación: por ahora se usa a través
             de Atajos de Siri conectados directamente a la API, sin
             integraciones con Gmail, WhatsApp o Notion todavía.
           </p>
