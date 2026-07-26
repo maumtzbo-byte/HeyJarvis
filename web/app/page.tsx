@@ -43,27 +43,8 @@ const marqueeStack = [...stack, ...stack];
 export default function Home() {
   return (
     <main className="relative z-10 flex flex-1 flex-col">
-      <section className="relative flex min-h-[calc(100svh-73px)] flex-col overflow-visible">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[27%] -translate-x-1/2 -translate-y-1/2 opacity-70"
-        >
-          <div className="orb-glow-white" />
-          <div className="orb-breathe relative h-40 w-40 sm:h-52 sm:w-52">
-            <div className="orb-spin absolute inset-0">
-              <Image
-                src="/brand/hero-orb.png"
-                alt=""
-                fill
-                sizes="208px"
-                priority
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="relative flex flex-1 flex-col items-center justify-center px-6 text-center">
+      <section className="relative flex min-h-[calc(100svh-73px)] flex-col overflow-hidden">
+        <div className="relative z-10 flex flex-col items-center px-6 pt-16 text-center sm:pt-20">
           <span
             className="animate-fade-up rounded-full liquid-glass bg-background/60 px-3 py-1 text-xs font-medium text-muted"
             style={{ animationDelay: "0ms" }}
@@ -72,7 +53,7 @@ export default function Home() {
           </span>
           <h1
             style={{ fontFamily: "var(--font-display)", animationDelay: "80ms" }}
-            className="animate-fade-up mt-6 text-[64px] font-normal leading-[1.02] tracking-[-0.024em] sm:text-[110px] lg:text-[160px]"
+            className="animate-fade-up mt-6 text-[46px] font-normal leading-[1.05] tracking-[-0.02em] sm:text-[68px] lg:text-[80px]"
           >
             <span className="text-foreground">Hey </span>
             <span
@@ -86,14 +67,14 @@ export default function Home() {
             </span>
           </h1>
           <p
-            className="animate-fade-up mt-[9px] max-w-xs sm:max-w-md text-lg leading-8 text-muted opacity-80"
+            className="animate-fade-up mt-4 max-w-xs sm:max-w-md text-lg leading-8 text-muted opacity-80"
             style={{ animationDelay: "160ms" }}
           >
             Tu segundo cerebro, que escucha y recuerda todo lo que le contás
             por voz.
           </p>
           <div
-            className="animate-fade-up mt-[25px] flex flex-col gap-4 sm:flex-row"
+            className="animate-fade-up mt-7 flex flex-col gap-4 sm:flex-row"
             style={{ animationDelay: "240ms" }}
           >
             <Link
@@ -111,24 +92,45 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-5xl px-6 pb-10">
-          <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
-            <p className="shrink-0 text-sm leading-tight text-foreground/50">
-              Construido con
-              <br />
-              tecnología real
-            </p>
-            <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-              <div className="flex w-max animate-marquee items-center gap-10">
-                {marqueeStack.map((name, index) => (
-                  <div key={`${name}-${index}`} className="flex items-center gap-10">
-                    <span className="text-base font-medium text-foreground/60 whitespace-nowrap transition-colors hover:text-foreground">
-                      {name}
-                    </span>
-                    <span className="h-1 w-1 shrink-0 rounded-full bg-foreground/20" />
-                  </div>
-                ))}
+        {/* Rising-planet orb: massive, anchored to the bottom edge, cut off by the section frame */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center"
+        >
+          <div
+            className="animate-glow-pulse absolute bottom-0 h-[360px] w-[640px] -translate-y-[10%] rounded-full opacity-60 blur-[90px] sm:h-[460px] sm:w-[860px]"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(255,255,255,0.6), rgba(139,130,255,0.28) 55%, transparent 75%)",
+            }}
+          />
+          <div className="relative h-[420px] w-[420px] translate-y-[42%] sm:h-[640px] sm:w-[640px] lg:h-[760px] lg:w-[760px]">
+            <div className="orb-breathe absolute inset-0">
+              <div className="orb-spin absolute inset-0">
+                <Image
+                  src="/brand/hero-orb.png"
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 760px, (min-width: 640px) 640px, 420px"
+                  priority
+                  className="object-contain"
+                />
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto mt-auto w-full max-w-5xl px-6 pb-10">
+          <div className="mx-auto w-full max-w-xl overflow-hidden rounded-full border border-white/10 bg-background/90 px-6 py-3 shadow-[0_8px_40px_-8px_rgba(0,0,0,0.8)] backdrop-blur-xl [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+            <div className="flex w-max animate-marquee items-center gap-10">
+              {marqueeStack.map((name, index) => (
+                <div key={`${name}-${index}`} className="flex items-center gap-10">
+                  <span className="text-sm font-medium text-foreground/70 whitespace-nowrap transition-colors hover:text-foreground">
+                    {name}
+                  </span>
+                  <span className="h-1 w-1 shrink-0 rounded-full bg-foreground/25" />
+                </div>
+              ))}
             </div>
           </div>
         </div>

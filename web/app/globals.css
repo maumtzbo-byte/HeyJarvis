@@ -140,15 +140,13 @@ body::after {
   }
 }
 
-@keyframes orb-glow-pulse {
+@keyframes glow-pulse {
   0%,
   100% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(0.94);
+    opacity: 0.45;
   }
   50% {
-    opacity: 0.7;
-    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.85;
   }
 }
 
@@ -182,24 +180,9 @@ body::after {
   will-change: transform;
 }
 
-/* Fixed, visible-but-soft white glow anchored behind the orb */
-.orb-glow-white {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 230px;
-  height: 230px;
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.16) 45%,
-    rgba(255, 255, 255, 0) 72%
-  );
-  filter: blur(26px);
-  animation: orb-glow-pulse 6s ease-in-out infinite;
-  will-change: transform, opacity;
+.animate-glow-pulse {
+  animation: glow-pulse 6s ease-in-out infinite;
+  will-change: opacity;
 }
 
 .animate-marquee {
@@ -213,7 +196,7 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .orb-breathe,
   .orb-spin,
-  .orb-glow-white,
+  .animate-glow-pulse,
   .animate-marquee,
   .animate-fade-up {
     animation: none;
