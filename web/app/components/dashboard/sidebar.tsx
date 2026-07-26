@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Sparkles, Settings, ArrowLeft } from "lucide-react";
+import { BookOpen, Sparkles, Plug, Settings, ArrowLeft } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Memories", icon: BookOpen },
   { href: "/dashboard/ask", label: "Ask", icon: Sparkles },
+  { href: "/dashboard/connectors", label: "Connectors", icon: Plug },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
