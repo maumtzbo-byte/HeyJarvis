@@ -30,12 +30,18 @@ export default function SiteHeader() {
     );
     if (elements.length === 0) return;
 
+    const intersecting = new Map<string, number>();
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveSection(visible.target.id);
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            intersecting.set(entry.target.id, entry.intersectionRatio);
+          } else {
+            intersecting.delete(entry.target.id);
+          }
+        }
+        const [topId] = [...intersecting.entries()].sort((a, b) => b[1] - a[1])[0] ?? [null];
+        setActiveSection(topId);
       },
       { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );

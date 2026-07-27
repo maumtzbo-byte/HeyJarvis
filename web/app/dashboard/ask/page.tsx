@@ -48,7 +48,7 @@ export default function AskPage() {
         Ask about anything you&rsquo;ve told HeyYarvis, the same way you would with Siri.
       </p>
 
-      <div className="mt-8 flex flex-1 flex-col gap-4">
+      <div className="mt-8 flex flex-1 flex-col justify-end gap-4">
         {messages.map((message, index) => (
           <div
             key={index}

@@ -1,12 +1,68 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, Link2 } from "lucide-react";
+import {
+  Search,
+  Link2,
+  FileText,
+  MessageSquare,
+  Mail,
+  CalendarDays,
+  MessageCircle,
+  Cloud,
+  CheckSquare,
+  KanbanSquare,
+  ListTodo,
+  Workflow,
+  Send,
+  Inbox,
+  MapPin,
+  Zap,
+  Briefcase,
+  GraduationCap,
+  BookOpen,
+  Activity,
+  HeartPulse,
+  Landmark,
+  Car,
+  Navigation,
+  Box,
+  ShoppingCart,
+  type LucideIcon,
+} from "lucide-react";
 import { roadmapPhases } from "../../content/site-content";
 
 const phasesWithApps = roadmapPhases.filter(
   (phase): phase is typeof phase & { apps: string[] } => Boolean(phase.apps?.length)
 );
+
+const APP_ICONS: Record<string, LucideIcon> = {
+  Notion: FileText,
+  Slack: MessageSquare,
+  Gmail: Mail,
+  Calendar: CalendarDays,
+  WhatsApp: MessageCircle,
+  Drive: Cloud,
+  Todoist: CheckSquare,
+  Trello: KanbanSquare,
+  Asana: ListTodo,
+  ClickUp: Workflow,
+  Telegram: Send,
+  Outlook: Inbox,
+  Maps: MapPin,
+  Zapier: Zap,
+  LinkedIn: Briefcase,
+  "Google Classroom": GraduationCap,
+  Canvas: BookOpen,
+  Whoop: Activity,
+  "Apple Health": HeartPulse,
+  Plaid: Landmark,
+  Uber: Car,
+  Lyft: Navigation,
+  Dropbox: Box,
+  Make: Workflow,
+  Amazon: ShoppingCart,
+};
 
 export default function ConnectorsPage() {
   const [query, setQuery] = useState("");
@@ -67,14 +123,16 @@ export default function ConnectorsPage() {
                 {phase.label}
               </h2>
               <ul className="grid gap-2.5 sm:grid-cols-2">
-                {phase.apps.map((app) => (
+                {phase.apps.map((app) => {
+                  const AppIcon = APP_ICONS[app] ?? Link2;
+                  return (
                   <li
                     key={app}
                     className="card-hover-cool flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent-cool/15 to-transparent ring-1 ring-accent-cool/20">
-                        <Link2 className="h-4 w-4 text-accent-cool" strokeWidth={1.75} />
+                        <AppIcon className="h-4 w-4 text-accent-cool" strokeWidth={1.75} />
                       </div>
                       <span className="text-sm font-medium">{app}</span>
                     </div>
@@ -86,7 +144,8 @@ export default function ConnectorsPage() {
                       Connect
                     </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
             </div>
           ))}
