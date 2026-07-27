@@ -6,6 +6,53 @@ ideas de producto/diseño/arquitectura solo se proponen, nunca se implementan si
 
 ---
 
+## ✅ Actualización — la seguridad crítica de abajo ya está corregida
+
+Diste luz verde ("Ambas, en ese orden") a corregir el hallazgo 🚨 de abajo y luego avanzar con
+la Idea #1. Ambas cosas quedaron implementadas y verificadas en esta misma rama, en 2 commits
+nuevos después de este log:
+
+**Commit "Fix IDOR: /memory, /memories, /query no longer trust a client-supplied user_id"**
+- Elegiste la opción de "token personal por cuenta" (no requerir login real en iOS) — quedó
+  implementada tal cual: nueva tabla `personal_api_tokens` (aplicada ya a tu proyecto real de
+  Supabase vía MCP, solo guarda el hash, nunca el token en claro), nuevo endpoint
+  `POST/GET/DELETE /profile/tokens`, y una nueva dependencia `get_user_id_from_bearer_or_token`
+  que reemplaza el `X-API-Key` compartido: ahora el `user_id` SIEMPRE se deriva del token/sesión,
+  nunca del cliente.
+- Verifiqué a mano contra `Models.swift` (el struct `QueryResponse` de iOS) que agregar
+  resúmenes a `memories_used` habría roto el decodificador de Swift en cada llamada del Shortcut
+  de Siri — por eso `memories_used` quedó intacto y agregué un campo nuevo
+  `memories_used_detail` en vez de cambiar el existente. Cero cambios de código en el repo iOS.
+- Encontré y corregí un bug real durante la verificación en vivo: un `X-API-Key` inválido
+  devolvía 500 en vez de 401 (la consulta a Supabase no tenía manejo de errores) — ahora falla
+  cerrado (401) ante cualquier problema de red/Supabase.
+- Verificación: 61 tests de pytest en verde (nuevos: `test_dependencies.py`,
+  `test_token_service.py`, `test_tokens.py`, más tests de regresión específicos que confirman
+  que un `user_id` distinto en el payload ya no se respeta), y probé en vivo contra el backend
+  corriendo localmente (no mockeado) que sin credenciales, con un token falso, o con un Bearer
+  falso, todo responde 401 — nunca 200 ni 500.
+- **Dato real de tu Supabase**: hoy solo hay 1 fila en `memories`, con `user_id = "test-carlos"`
+  (claramente un dato de prueba viejo, no una cuenta real) — no hice nada con ella, pero ya no
+  va a ser accesible bajo el nuevo modelo salvo que me digas que la reasigne a tu UUID real.
+
+**Commit "Wire Memories and Ask to real backend data"**
+- Memories y Ask ahora sí hablan con el backend real (mismo patrón de sesión de Supabase que ya
+  usaba `/profile`), con estado vacío real quando no tienes recuerdos guardados aún, y vuelven a
+  los datos de ejemplo + la insignia "Preview" solo si no hay sesión o el backend no responde.
+- Quité el formulario manual de "user_id + API key" de Settings (era literalmente la puerta de
+  entrada del hueco de seguridad) y lo reemplacé por una sección para generar/ver/revocar tus
+  tokens personales.
+- Verificación: `tsc`/`eslint`/`build` limpios, axe-core en 0 violaciones en las 3 páginas
+  tocadas, y probé con Playwright contra el backend real corriendo localmente los 2 caminos: sin
+  sesión válida (cae a modo preview correctamente) y simulando una respuesta real del backend
+  (muestra los datos reales, oculta la insignia, agrupa por fecha correctamente).
+
+**Pendiente de que tú confirmes** (no lo puedo verificar yo): que pegar un token nuevo generado
+desde Settings en el campo "API key" de la app de iOS de verdad sigue guardando/preguntando por
+Siri sin ningún cambio de código — no tengo forma de compilar/correr Swift en este entorno.
+
+---
+
 ## 🚨 SEGURIDAD CRÍTICA — no corregido, requiere tu confirmación explícita
 
 **IDOR en `/memory`, `/memories/{user_id}` y `/query`: cualquiera puede leer o escribir los
