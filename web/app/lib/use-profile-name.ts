@@ -1,14 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { buildApiUrl } from "./api-url";
 import { supabase } from "./supabase-client";
-
-const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-function getApiUrl() {
-  if (typeof window === "undefined") return DEFAULT_API_URL;
-  return window.localStorage.getItem("heyjarvis:apiUrl") || DEFAULT_API_URL;
-}
 
 export function useProfileName(): string | null {
   const [name, setName] = useState<string | null>(null);
@@ -18,7 +12,7 @@ export function useProfileName(): string | null {
     supabase.auth.getSession().then(async ({ data }) => {
       if (!data.session) return;
       try {
-        const response = await fetch(`${getApiUrl().replace(/\/$/, "")}/profile`, {
+        const response = await fetch(buildApiUrl("/profile"), {
           headers: { Authorization: `Bearer ${data.session.access_token}` },
         });
         if (!response.ok) return;

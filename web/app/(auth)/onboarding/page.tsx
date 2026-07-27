@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Session } from "@supabase/supabase-js";
+import { buildApiUrl } from "../../lib/api-url";
 import { supabase } from "../../lib/supabase-client";
 import {
   findPersonaByToneAndVoice,
@@ -15,13 +16,7 @@ import {
 import { JarvisPersonaCarousel } from "../../components/onboarding/jarvis-persona-carousel";
 import { PersonalizeToneVoice } from "../../components/onboarding/personalize-tone-voice";
 
-const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const STEP_COUNT = 4;
-
-function getApiUrl() {
-  if (typeof window === "undefined") return DEFAULT_API_URL;
-  return window.localStorage.getItem("heyjarvis:apiUrl") || DEFAULT_API_URL;
-}
 
 function StepHeading({ title, subtitle }: { title: string; subtitle: string }) {
   return (
@@ -89,7 +84,7 @@ export default function OnboardingPage() {
       setSession(data.session);
 
       try {
-        const response = await fetch(`${getApiUrl().replace(/\/$/, "")}/profile`, {
+        const response = await fetch(buildApiUrl("/profile"), {
           headers: { Authorization: `Bearer ${data.session.access_token}` },
         });
         if (response.ok) {
@@ -126,7 +121,7 @@ export default function OnboardingPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${getApiUrl().replace(/\/$/, "")}/profile`, {
+      const response = await fetch(buildApiUrl("/profile"), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

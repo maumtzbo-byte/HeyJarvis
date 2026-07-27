@@ -2,14 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { buildApiUrl } from "../../lib/api-url";
 import { supabase } from "../../lib/supabase-client";
-
-const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-function getApiUrl() {
-  if (typeof window === "undefined") return DEFAULT_API_URL;
-  return window.localStorage.getItem("heyjarvis:apiUrl") || DEFAULT_API_URL;
-}
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -23,7 +17,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         return;
       }
       try {
-        const response = await fetch(`${getApiUrl().replace(/\/$/, "")}/profile`, {
+        const response = await fetch(buildApiUrl("/profile"), {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         if (response.ok) {

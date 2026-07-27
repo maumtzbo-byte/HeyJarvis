@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
+import { API_URL_STORAGE_KEY, buildApiUrl, DEFAULT_API_URL } from "../../lib/api-url";
 import { isSupabaseConfigured, supabase } from "../../lib/supabase-client";
 
 type Memory = {
@@ -12,10 +13,8 @@ type Memory = {
   created_at: string;
 };
 
-const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
 const STORAGE_KEYS = {
-  apiUrl: "heyjarvis:apiUrl",
+  apiUrl: API_URL_STORAGE_KEY,
   userId: "heyjarvis:userId",
 };
 
@@ -42,10 +41,8 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     supabase.auth.getSession().then(({ data }) => {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs with the auth session after mount
       setSession(data.session);
       if (data.session && !window.localStorage.getItem(STORAGE_KEYS.userId)) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- prefills user_id with the real account id
         setUserId(data.session.user.id);
       }
     });
@@ -71,7 +68,7 @@ export default function SettingsPage() {
 
     try {
       const response = await fetch(
-        `${apiUrl.replace(/\/$/, "")}/memories/${encodeURIComponent(userId.trim())}`,
+        buildApiUrl(`/memories/${encodeURIComponent(userId.trim())}`, apiUrl),
         {
           headers: apiKey ? { "X-API-Key": apiKey } : undefined,
         }
