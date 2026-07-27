@@ -6,6 +6,7 @@ from app.dependencies import verify_api_key
 from app.models.schemas import QueryRequest, QueryResponse
 from app.services.claude_service import generate_answer
 from app.services.memory_service import search_memories
+from app.services.profile_service import get_profile
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["query"], dependencies=[Depends(verify_api_key)])
@@ -16,7 +17,20 @@ async def query_memories(payload: QueryRequest) -> QueryResponse:
     try:
         memories = search_memories(payload.user_id, payload.question)
         context = [memory["summary"] for memory in memories]
-        answer = generate_answer(payload.question, context)
+
+        tone = voice_style = None
+        try:
+            profile = get_profile(payload.user_id)
+            if profile:
+                tone = profile.get("tone")
+                voice_style = profile.get("voice_style")
+        except Exception:
+            logger.info(
+                "No onboarding preferences for user %s, answering with a neutral tone",
+                payload.user_id,
+            )
+
+        answer = generate_answer(payload.question, context, tone=tone, voice_style=voice_style)
         return QueryResponse(
             response=answer,
             memories_used=[memory["id"] for memory in memories],

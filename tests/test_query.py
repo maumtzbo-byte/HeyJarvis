@@ -46,3 +46,51 @@ def test_query_rejects_missing_fields():
     response = client.post("/query", json={"user_id": "test-user"})
 
     assert response.status_code == 422
+
+
+@patch("app.routers.query.get_profile")
+@patch("app.routers.query.generate_answer")
+@patch("app.routers.query.search_memories")
+def test_query_passes_onboarding_preferences_to_the_answer(
+    mock_search, mock_generate, mock_get_profile
+):
+    mock_search.return_value = [{"id": "mem-1", "summary": "Meeting with Carlos Thursday"}]
+    mock_generate.return_value = "It's Thursday!"
+    mock_get_profile.return_value = {
+        "tone": "warm and friendly",
+        "voice_style": "encouraging coach",
+    }
+
+    response = client.post(
+        "/query",
+        json={"user_id": "real-account-id", "question": "When is my meeting?"},
+    )
+
+    assert response.status_code == 200
+    mock_generate.assert_called_once_with(
+        "When is my meeting?",
+        ["Meeting with Carlos Thursday"],
+        tone="warm and friendly",
+        voice_style="encouraging coach",
+    )
+
+
+@patch("app.routers.query.get_profile")
+@patch("app.routers.query.generate_answer")
+@patch("app.routers.query.search_memories")
+def test_query_still_works_when_there_is_no_profile(
+    mock_search, mock_generate, mock_get_profile
+):
+    mock_search.return_value = []
+    mock_generate.return_value = "I don't know that yet."
+    mock_get_profile.side_effect = RuntimeError("SUPABASE_URL and SUPABASE_KEY must be set")
+
+    response = client.post(
+        "/query",
+        json={"user_id": "carlos-123", "question": "What's the wifi password?"},
+    )
+
+    assert response.status_code == 200
+    mock_generate.assert_called_once_with(
+        "What's the wifi password?", [], tone=None, voice_style=None
+    )

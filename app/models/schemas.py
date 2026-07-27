@@ -35,3 +35,18 @@ class MemoryItem(BaseModel):
 class MemoriesListResponse(BaseModel):
     user_id: str
     memories: List[MemoryItem]
+
+
+class ProfileRequest(BaseModel):
+    use_case: str = Field(..., min_length=1)
+    focus_areas: List[str] = Field(default_factory=list)
+    tone: str = Field(..., min_length=1)
+    voice_style: str = Field(..., min_length=1)
+
+
+class ProfileResponse(BaseModel):
+    use_case: Optional[str] = None
+    focus_areas: List[str] = Field(default_factory=list)
+    tone: Optional[str] = None
+    voice_style: Optional[str] = None
+    onboarding_completed: bool = False

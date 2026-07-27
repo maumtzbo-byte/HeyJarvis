@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from app.services.claude_service import summarize_memory
+from app.services.claude_service import generate_answer, summarize_memory
 
 
 def _tool_use_message(input_data: dict):
@@ -53,3 +53,37 @@ def test_summarize_memory_treats_missing_reminder_key_as_none(mock_get_client):
     _, reminder_at = summarize_memory("I bought milk today")
 
     assert reminder_at is None
+
+
+def _text_message(text: str):
+    return SimpleNamespace(content=[SimpleNamespace(text=text)])
+
+
+@patch("app.services.claude_service._get_client")
+def test_generate_answer_without_preferences_uses_base_instructions(mock_get_client):
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = _text_message("Thursday at 3pm.")
+    mock_get_client.return_value = mock_client
+
+    generate_answer("When is my meeting?", ["Meeting with Carlos on Thursday at 3pm"])
+
+    prompt = mock_client.messages.create.call_args.kwargs["messages"][0]["content"]
+    assert "speaking style" not in prompt
+
+
+@patch("app.services.claude_service._get_client")
+def test_generate_answer_with_preferences_adds_style_instructions(mock_get_client):
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = _text_message("Thursday at 3pm.")
+    mock_get_client.return_value = mock_client
+
+    generate_answer(
+        "When is my meeting?",
+        ["Meeting with Carlos on Thursday at 3pm"],
+        tone="warm and friendly",
+        voice_style="encouraging coach",
+    )
+
+    prompt = mock_client.messages.create.call_args.kwargs["messages"][0]["content"]
+    assert "tone: warm and friendly" in prompt
+    assert "personality: encouraging coach" in prompt

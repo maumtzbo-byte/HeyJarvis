@@ -101,7 +101,26 @@ def summarize_memory(text: str) -> Tuple[str, Optional[str]]:
         raise
 
 
-def generate_answer(question: str, context_memories: List[str]) -> str:
+def _build_answer_instructions(tone: Optional[str], voice_style: Optional[str]) -> str:
+    instructions = ANSWER_INSTRUCTIONS
+    style_bits = []
+    if tone:
+        style_bits.append(f"tone: {tone}")
+    if voice_style:
+        style_bits.append(f"personality: {voice_style}")
+    if style_bits:
+        instructions += (
+            " Match the user's preferred speaking style (" + ", ".join(style_bits) + ")."
+        )
+    return instructions
+
+
+def generate_answer(
+    question: str,
+    context_memories: List[str],
+    tone: Optional[str] = None,
+    voice_style: Optional[str] = None,
+) -> str:
     logger.info(
         "Calling Claude to answer the question using %d context memories",
         len(context_memories),
@@ -114,7 +133,7 @@ def generate_answer(question: str, context_memories: List[str]) -> str:
     prompt = (
         f"User's saved memories:\n{context_block}\n\n"
         f"User's question: {question}\n\n"
-        f"{ANSWER_INSTRUCTIONS}"
+        f"{_build_answer_instructions(tone, voice_style)}"
     )
     try:
         message = _get_client().messages.create(
