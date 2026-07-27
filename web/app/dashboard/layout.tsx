@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { DashboardSidebar } from "../components/dashboard/sidebar";
 import { MobileTabBar } from "../components/dashboard/mobile-tab-bar";
+
+export const metadata: Metadata = {
+  title: "Memories — HeyYarvis",
+  description: "Everything you've told HeyYarvis, searchable by meaning.",
+};
 
 export default function DashboardLayout({
   children,

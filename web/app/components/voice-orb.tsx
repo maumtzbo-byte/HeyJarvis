@@ -44,6 +44,7 @@ export function VoiceOrb({ className }: { className?: string }) {
           alt=""
           width={960}
           height={960}
+          sizes="(min-width: 1024px) 256px, (min-width: 640px) 192px, 128px"
           className="h-full w-full object-contain"
           priority
         />
