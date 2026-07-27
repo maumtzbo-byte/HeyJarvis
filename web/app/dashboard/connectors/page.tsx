@@ -63,14 +63,14 @@ export default function ConnectorsPage() {
         <div className="flex flex-col gap-8">
           {groups.map((phase) => (
             <div key={phase.label} className="flex flex-col gap-3">
-              <h2 className="font-mono text-[11px] uppercase tracking-wide text-muted/70">
+              <h2 className="font-mono text-[11px] uppercase tracking-wide text-muted/85">
                 {phase.label}
               </h2>
               <ul className="grid gap-2.5 sm:grid-cols-2">
                 {phase.apps.map((app) => (
                   <li
                     key={app}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4"
+                    className="card-hover-cool flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface p-4"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent-cool/15 to-transparent ring-1 ring-accent-cool/20">
@@ -81,7 +81,7 @@ export default function ConnectorsPage() {
                     <button
                       type="button"
                       disabled
-                      className="shrink-0 cursor-not-allowed rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted/60"
+                      className="shrink-0 cursor-not-allowed rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted/80"
                     >
                       Connect
                     </button>

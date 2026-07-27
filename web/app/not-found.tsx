@@ -11,7 +11,7 @@ export default function NotFound() {
         height={48}
         className="rounded-full opacity-80"
       />
-      <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-muted/70">
+      <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-muted/85">
         404
       </p>
       <h1

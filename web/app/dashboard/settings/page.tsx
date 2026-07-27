@@ -160,7 +160,7 @@ export default function SettingsPage() {
             <li key={memory.id} className="rounded-2xl border border-border bg-surface p-4">
               <p className="text-sm font-medium">{memory.summary}</p>
               <p className="mt-1 text-sm text-muted">{memory.text}</p>
-              <p className="mt-2 text-xs text-muted/70">
+              <p className="mt-2 text-xs text-muted/85">
                 {new Date(memory.created_at).toLocaleString("en-US")}
               </p>
             </li>

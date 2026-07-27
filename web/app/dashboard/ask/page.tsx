@@ -102,6 +102,7 @@ export default function AskPage() {
         />
         <button
           type="submit"
+          aria-label="Send"
           disabled={!input.trim()}
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-opacity hover:opacity-90 disabled:opacity-40"
         >

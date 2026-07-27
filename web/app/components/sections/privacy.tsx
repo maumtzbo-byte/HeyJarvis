@@ -15,7 +15,7 @@ export function Privacy() {
       <div className="mx-auto max-w-5xl px-6 py-24">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1fr] lg:items-start">
           <Reveal>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/85">
               Privacy
             </p>
             <h2

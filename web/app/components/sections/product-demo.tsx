@@ -26,7 +26,7 @@ export function ProductDemo() {
 
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal className="mx-auto max-w-xl text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/85">
             See it in action
           </p>
           <h2
@@ -79,7 +79,7 @@ export function ProductDemo() {
               </Reveal>
 
               <Reveal delay={0.75}>
-                <p className="text-center font-mono text-[10px] uppercase tracking-wide text-muted/70">
+                <p className="text-center font-mono text-[10px] uppercase tracking-wide text-muted/85">
                   Answered instantly — no app to open
                 </p>
               </Reveal>

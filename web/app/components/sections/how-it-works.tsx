@@ -6,7 +6,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="section-divider section-glow-warm">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/85">
             Process
           </p>
           <h2

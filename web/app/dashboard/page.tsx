@@ -70,7 +70,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-8">
           {groups.map(([label, items]) => (
             <div key={label} className="flex flex-col gap-3">
-              <h2 className="font-mono text-[11px] uppercase tracking-wide text-muted/70">
+              <h2 className="font-mono text-[11px] uppercase tracking-wide text-muted/85">
                 {label}
               </h2>
               <ul className="flex flex-col gap-2.5">
@@ -81,7 +81,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <p className="text-sm font-medium">{memory.summary}</p>
-                      <span className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-muted/60">
+                      <span className="shrink-0 font-mono text-[10px] uppercase tracking-wide text-muted/80">
                         {memory.time}
                       </span>
                     </div>

@@ -6,7 +6,7 @@ export function Faq() {
     <section className="section-divider">
       <div className="mx-auto max-w-3xl px-6 py-24">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/85">
             FAQ
           </p>
           <h2

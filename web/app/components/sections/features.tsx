@@ -16,7 +16,7 @@ export function Features() {
     <section id="why-heyyarvis" className="section-divider section-glow-cool">
       <div className="mx-auto max-w-5xl px-6 py-24">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/70">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted/85">
             Why us
           </p>
           <h2

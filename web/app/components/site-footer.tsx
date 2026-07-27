@@ -31,7 +31,7 @@ export default function SiteFooter() {
 
           {footerColumns.map((column) => (
             <div key={column.title} className="flex flex-col gap-3">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted/70">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted/85">
                 {column.title}
               </p>
               <ul className="flex flex-col gap-2.5 text-sm text-muted">
@@ -50,7 +50,7 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-border/80 pt-6 text-xs text-muted/70 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-2 border-t border-border/80 pt-6 text-xs text-muted/85 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {new Date().getFullYear()} HeyYarvis. All rights reserved.</p>
           <p>Built with Claude, Supabase, and Next.js.</p>
         </div>
