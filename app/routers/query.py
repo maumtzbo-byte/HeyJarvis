@@ -22,7 +22,7 @@ async def query_memories(payload: QueryRequest) -> QueryResponse:
             memories_used=[memory["id"] for memory in memories],
         )
     except Exception as exc:
-        logger.exception("Error respondiendo la consulta del usuario %s", payload.user_id)
+        logger.exception("Error answering the query for user %s", payload.user_id)
         raise HTTPException(
-            status_code=500, detail=f"No se pudo procesar la pregunta: {exc}"
+            status_code=500, detail=f"Could not process the question: {exc}"
         ) from exc

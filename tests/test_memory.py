@@ -10,33 +10,51 @@ client = TestClient(app)
 
 @patch("app.routers.memory.create_memory")
 def test_add_memory_returns_id_and_summary(mock_create):
-    mock_create.return_value = ("mem-1", "Reunión con Carlos el jueves a las 3pm")
+    mock_create.return_value = ("mem-1", "Meeting with Carlos on Thursday at 3pm", None)
 
     response = client.post(
         "/memory",
-        json={"user_id": "test-user", "text": "Recuérdame que quedé con Carlos el jueves a las 3pm"},
+        json={"user_id": "test-user", "text": "Remind me I'm meeting Carlos Thursday at 3pm"},
     )
 
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == "mem-1"
-    assert data["summary"] == "Reunión con Carlos el jueves a las 3pm"
+    assert data["summary"] == "Meeting with Carlos on Thursday at 3pm"
+    assert data["reminder_at"] is None
     mock_create.assert_called_once_with(
-        "test-user", "Recuérdame que quedé con Carlos el jueves a las 3pm"
+        "test-user", "Remind me I'm meeting Carlos Thursday at 3pm"
     )
 
 
 @patch("app.routers.memory.create_memory")
-def test_add_memory_returns_500_when_save_fails(mock_create):
-    mock_create.side_effect = RuntimeError("Supabase no disponible")
+def test_add_memory_returns_detected_reminder_time(mock_create):
+    mock_create.return_value = (
+        "mem-2",
+        "Meeting with Carlos on Thursday at 3pm",
+        "2026-07-30T15:00:00-06:00",
+    )
 
     response = client.post(
         "/memory",
-        json={"user_id": "test-user", "text": "Algo para recordar"},
+        json={"user_id": "test-user", "text": "Remind me I'm meeting Carlos Thursday at 3pm"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["reminder_at"] == "2026-07-30T15:00:00-06:00"
+
+
+@patch("app.routers.memory.create_memory")
+def test_add_memory_returns_500_when_save_fails(mock_create):
+    mock_create.side_effect = RuntimeError("Supabase unavailable")
+
+    response = client.post(
+        "/memory",
+        json={"user_id": "test-user", "text": "Something to remember"},
     )
 
     assert response.status_code == 500
-    assert "No se pudo guardar el recuerdo" in response.json()["detail"]
+    assert "Could not save the memory" in response.json()["detail"]
 
 
 def test_add_memory_rejects_missing_fields():
@@ -78,9 +96,9 @@ def test_get_memories_returns_empty_list_when_no_memories(mock_list):
 
 @patch("app.routers.memory.list_memories")
 def test_get_memories_returns_500_when_lookup_fails(mock_list):
-    mock_list.side_effect = RuntimeError("Supabase no disponible")
+    mock_list.side_effect = RuntimeError("Supabase unavailable")
 
     response = client.get("/memories/test-user")
 
     assert response.status_code == 500
-    assert "No se pudieron obtener los recuerdos" in response.json()["detail"]
+    assert "Could not fetch memories" in response.json()["detail"]

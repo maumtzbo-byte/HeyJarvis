@@ -17,12 +17,12 @@ router = APIRouter(tags=["memory"], dependencies=[Depends(verify_api_key)])
 @router.post("/memory", response_model=MemoryCreateResponse)
 async def add_memory(payload: MemoryCreateRequest) -> MemoryCreateResponse:
     try:
-        memory_id, summary = create_memory(payload.user_id, payload.text)
-        return MemoryCreateResponse(id=memory_id, summary=summary)
+        memory_id, summary, reminder_at = create_memory(payload.user_id, payload.text)
+        return MemoryCreateResponse(id=memory_id, summary=summary, reminder_at=reminder_at)
     except Exception as exc:
-        logger.exception("Error creando recuerdo para el usuario %s", payload.user_id)
+        logger.exception("Error creating memory for user %s", payload.user_id)
         raise HTTPException(
-            status_code=500, detail=f"No se pudo guardar el recuerdo: {exc}"
+            status_code=500, detail=f"Could not save the memory: {exc}"
         ) from exc
 
 
@@ -32,7 +32,7 @@ async def get_memories(user_id: str) -> MemoriesListResponse:
         memories = list_memories(user_id)
         return MemoriesListResponse(user_id=user_id, memories=memories)
     except Exception as exc:
-        logger.exception("Error listando recuerdos del usuario %s", user_id)
+        logger.exception("Error listing memories for user %s", user_id)
         raise HTTPException(
-            status_code=500, detail=f"No se pudieron obtener los recuerdos: {exc}"
+            status_code=500, detail=f"Could not fetch memories: {exc}"
         ) from exc

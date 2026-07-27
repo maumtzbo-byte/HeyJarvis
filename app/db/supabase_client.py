@@ -14,7 +14,7 @@ MEMORIES_TABLE = "memories"
 def get_supabase_client() -> Client:
     if not settings.supabase_url or not settings.supabase_key:
         raise RuntimeError(
-            "SUPABASE_URL y SUPABASE_KEY deben estar configurados en el entorno (.env)"
+            "SUPABASE_URL and SUPABASE_KEY must be set in the environment (.env)"
         )
-    logger.info("Inicializando cliente de Supabase")
+    logger.info("Initializing Supabase client")
     return create_client(settings.supabase_url, settings.supabase_key)

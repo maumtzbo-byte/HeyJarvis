@@ -13,7 +13,7 @@ logging.basicConfig(
 
 app = FastAPI(
     title="HeyYarvis API",
-    description="Segundo cerebro personal: memoria persistente accesible por voz (Siri).",
+    description="Personal second brain: persistent memory, accessible by voice (Siri).",
     version="0.1.0",
 )
 

@@ -39,7 +39,7 @@ def test_query_returns_500_when_memory_search_fails(mock_search):
     )
 
     assert response.status_code == 500
-    assert "No se pudo procesar la pregunta" in response.json()["detail"]
+    assert "Could not process the question" in response.json()["detail"]
 
 
 def test_query_rejects_missing_fields():

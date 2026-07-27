@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -11,6 +11,7 @@ class MemoryCreateRequest(BaseModel):
 class MemoryCreateResponse(BaseModel):
     id: str
     summary: str
+    reminder_at: Optional[str] = None
 
 
 class QueryRequest(BaseModel):
@@ -28,6 +29,7 @@ class MemoryItem(BaseModel):
     text: str
     summary: str
     created_at: str
+    reminder_at: Optional[str] = None
 
 
 class MemoriesListResponse(BaseModel):
