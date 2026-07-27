@@ -40,10 +40,10 @@ export default function SignupPage() {
 
   if (checkEmail) {
     return (
-      <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 text-center">
+      <div className="liquid-glass w-full max-w-sm rounded-[2rem] border border-white/10 bg-surface/70 p-8 text-center shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] sm:p-10">
         <h1
           style={{ fontFamily: "var(--font-display)" }}
-          className="text-2xl font-semibold tracking-tight"
+          className="text-3xl font-semibold tracking-tight"
         >
           Check your email
         </h1>
@@ -53,7 +53,7 @@ export default function SignupPage() {
         </p>
         <Link
           href="/login"
-          className="mt-6 inline-flex h-10 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-opacity hover:opacity-90"
+          className="btn-primary mt-7 inline-flex h-11 items-center justify-center rounded-full px-6 text-sm font-medium"
         >
           Go to log in
         </Link>
@@ -62,10 +62,10 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8">
+    <div className="liquid-glass w-full max-w-sm rounded-[2rem] border border-white/10 bg-surface/70 p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] sm:p-10">
       <h1
         style={{ fontFamily: "var(--font-display)" }}
-        className="text-2xl font-semibold tracking-tight"
+        className="text-3xl font-semibold tracking-tight"
       >
         Create your account
       </h1>
@@ -79,7 +79,7 @@ export default function SignupPage() {
         </p>
       )}
 
-      <div className="mt-6">
+      <div className="mt-7">
         <OAuthButtons />
       </div>
 
@@ -101,7 +101,7 @@ export default function SignupPage() {
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
+            className="h-11 rounded-xl border border-border bg-background/40 px-3.5 text-sm outline-none transition-colors focus:border-accent-cool/50"
           />
         </div>
 
@@ -117,7 +117,7 @@ export default function SignupPage() {
             autoComplete="new-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
+            className="h-11 rounded-xl border border-border bg-background/40 px-3.5 text-sm outline-none transition-colors focus:border-accent-cool/50"
           />
         </div>
 
@@ -130,13 +130,13 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading || !isSupabaseConfigured}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="btn-primary mt-1 inline-flex h-11 items-center justify-center rounded-full text-sm font-medium disabled:opacity-50"
         >
           {loading ? "Creating account..." : "Create account"}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted">
+      <p className="mt-7 text-center text-sm text-muted">
         Already have an account?{" "}
         <Link href="/login" className="text-foreground underline underline-offset-2">
           Log in

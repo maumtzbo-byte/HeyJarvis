@@ -51,7 +51,7 @@ export function OAuthButtons() {
         type="button"
         onClick={() => handleOAuth("google")}
         disabled={loadingProvider !== null}
-        className="inline-flex h-10 items-center justify-center gap-2.5 rounded-full border border-border bg-transparent text-sm font-medium transition-colors hover:border-accent-cool/50 disabled:opacity-50"
+        className="btn-secondary inline-flex h-11 items-center justify-center gap-2.5 rounded-full border border-border bg-background/40 text-sm font-medium disabled:opacity-50"
       >
         <GoogleIcon />
         {loadingProvider === "google" ? "Redirecting..." : "Continue with Google"}
@@ -60,7 +60,7 @@ export function OAuthButtons() {
         type="button"
         onClick={() => handleOAuth("apple")}
         disabled={loadingProvider !== null}
-        className="inline-flex h-10 items-center justify-center gap-2.5 rounded-full border border-border bg-transparent text-sm font-medium transition-colors hover:border-accent-cool/50 disabled:opacity-50"
+        className="btn-secondary inline-flex h-11 items-center justify-center gap-2.5 rounded-full border border-border bg-background/40 text-sm font-medium disabled:opacity-50"
       >
         <AppleIcon />
         {loadingProvider === "apple" ? "Redirecting..." : "Continue with Apple"}

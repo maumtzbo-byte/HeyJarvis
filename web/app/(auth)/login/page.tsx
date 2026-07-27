@@ -32,10 +32,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8">
+    <div className="liquid-glass w-full max-w-sm rounded-[2rem] border border-white/10 bg-surface/70 p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] sm:p-10">
       <h1
         style={{ fontFamily: "var(--font-display)" }}
-        className="text-2xl font-semibold tracking-tight"
+        className="text-3xl font-semibold tracking-tight"
       >
         Welcome back
       </h1>
@@ -47,7 +47,7 @@ export default function LoginPage() {
         </p>
       )}
 
-      <div className="mt-6">
+      <div className="mt-7">
         <OAuthButtons />
       </div>
 
@@ -69,7 +69,7 @@ export default function LoginPage() {
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
+            className="h-11 rounded-xl border border-border bg-background/40 px-3.5 text-sm outline-none transition-colors focus:border-accent-cool/50"
           />
         </div>
 
@@ -84,7 +84,7 @@ export default function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
+            className="h-11 rounded-xl border border-border bg-background/40 px-3.5 text-sm outline-none transition-colors focus:border-accent-cool/50"
           />
         </div>
 
@@ -97,13 +97,13 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading || !isSupabaseConfigured}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="btn-primary mt-1 inline-flex h-11 items-center justify-center rounded-full text-sm font-medium disabled:opacity-50"
         >
           {loading ? "Logging in..." : "Log in"}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted">
+      <p className="mt-7 text-center text-sm text-muted">
         No account yet?{" "}
         <Link href="/signup" className="text-foreground underline underline-offset-2">
           Sign up
