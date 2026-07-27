@@ -112,6 +112,12 @@ export default function SiteHeader() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/login"
+            className="hidden text-sm text-foreground/70 transition-colors hover:text-foreground sm:inline-flex"
+          >
+            Log in
+          </Link>
+          <Link
             href="/dashboard"
             className="liquid-glass hidden items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-foreground transition-opacity hover:opacity-80 sm:inline-flex"
           >
@@ -158,6 +164,13 @@ export default function SiteHeader() {
                 </Link>
               );
             })}
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg px-3 py-3 text-base text-foreground/80 transition-colors hover:bg-surface/60"
+            >
+              Log in
+            </Link>
           </nav>
         </div>
       )}

@@ -1,6 +1,9 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
+import type { Session } from "@supabase/supabase-js";
+import { isSupabaseConfigured, supabase } from "../../lib/supabase-client";
 
 type Memory = {
   id: string;
@@ -23,6 +26,7 @@ export default function SettingsPage() {
   const [memories, setMemories] = useState<Memory[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     // Reads stored values from the browser after mount: this can't happen in
@@ -34,6 +38,26 @@ export default function SettingsPage() {
     if (storedApiUrl) setApiUrl(storedApiUrl);
     if (storedUserId) setUserId(storedUserId);
   }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    supabase.auth.getSession().then(({ data }) => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs with the auth session after mount
+      setSession(data.session);
+      if (data.session && !window.localStorage.getItem(STORAGE_KEYS.userId)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- prefills user_id with the real account id
+        setUserId(data.session.user.id);
+      }
+    });
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+    });
+    return () => subscription.subscription.unsubscribe();
+  }, []);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+  }
 
   async function fetchMemories(event: FormEvent) {
     event.preventDefault();
@@ -86,6 +110,47 @@ export default function SettingsPage() {
           Memories and Ask show sample data so you can preview the product.
           Connect your real backend here to pull your actual saved memories.
         </p>
+      </div>
+
+      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-6">
+        <h2 className="text-sm font-medium">Account</h2>
+        {session ? (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm">Signed in as {session.user.email}</p>
+              <p className="mt-1 text-xs text-muted">
+                Your tone and personality preferences shape how HeyYarvis answers you.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/onboarding"
+                className="rounded-full border border-border px-4 py-2 text-xs font-medium transition-colors hover:border-accent-cool/50"
+              >
+                Edit preferences
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-xs text-muted transition-colors hover:text-foreground"
+              >
+                Log out
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted">
+              Create an account to set the tone and personality HeyYarvis uses when it answers you.
+            </p>
+            <Link
+              href="/signup"
+              className="rounded-full bg-foreground px-4 py-2 text-xs font-medium text-background transition-opacity hover:opacity-90"
+            >
+              Sign up
+            </Link>
+          </div>
+        )}
       </div>
 
       <form

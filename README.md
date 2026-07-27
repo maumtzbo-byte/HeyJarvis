@@ -28,9 +28,11 @@ app/
     health.py
     memory.py
     query.py
+    profile.py            # preferencias de onboarding (requiere sesión real)
   services/             # lógica de negocio
     claude_service.py    # llamadas a Claude (resumen + generación de respuestas)
     memory_service.py    # orquesta Supabase + ChromaDB
+    profile_service.py    # lee/guarda preferencias en la tabla `profiles`
   models/
     schemas.py           # esquemas Pydantic (requests/responses)
   db/
@@ -129,6 +131,26 @@ Respuesta:
 
 ### `GET /memories/{user_id}`
 Lista los recuerdos guardados de un usuario (para un futuro dashboard).
+
+### `GET /profile` y `PUT /profile`
+Preferencias de onboarding (para qué usás HeyYarvis, qué querés que recuerde,
+tono y personalidad al responder) de una cuenta real. A diferencia de los
+endpoints de arriba, estos **no** usan `X-API-Key`: requieren una sesión real
+de Supabase Auth vía `Authorization: Bearer <access_token>` (el token que
+devuelve `supabase.auth.signInWithPassword` / `signUp` en el frontend).
+
+```bash
+curl -X PUT http://localhost:8000/profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <access_token>" \
+  -d '{"use_case": "work", "focus_areas": ["meetings"], "tone": "warm and friendly", "voice_style": "encouraging coach"}'
+```
+
+`POST /query` busca automáticamente el perfil del `user_id` que llama (si
+existe) y usa `tone`/`voice_style` para darle forma a la respuesta de Claude.
+Si no hay perfil (por ejemplo, un `user_id` que no es una cuenta real, como
+los que usan los Atajos de Siri hoy), responde igual que antes, con un tono
+neutral.
 
 ## Tests
 
