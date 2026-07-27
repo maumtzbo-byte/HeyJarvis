@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import health, memory, profile, query
+from app.routers import health, memory, profile, query, tokens
 
 logging.basicConfig(
     level=logging.INFO,
@@ -20,7 +20,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins_list,
-    allow_methods=["GET", "POST", "PUT"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Content-Type", "X-API-Key", "Authorization"],
 )
 
@@ -28,3 +28,4 @@ app.include_router(health.router)
 app.include_router(memory.router)
 app.include_router(query.router)
 app.include_router(profile.router)
+app.include_router(tokens.router)

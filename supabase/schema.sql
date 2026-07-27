@@ -46,3 +46,31 @@ create policy "Users manage their own profile"
     for all
     using (auth.uid() = user_id)
     with check (auth.uid() = user_id);
+
+-- Personal API tokens: long-lived, GitHub-PAT-style tokens a signed-in user
+-- generates from the web dashboard and pastes into the iOS app's existing
+-- "API key" field (sent as X-API-Key). Only the SHA-256 hash is stored,
+-- never the raw token. Replaces the old single shared APP_API_KEY secret,
+-- which let any caller read/write any other account's memories by simply
+-- supplying a different user_id.
+create table if not exists public.personal_api_tokens (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid not null references auth.users(id) on delete cascade,
+    label text not null default 'iOS app',
+    token_hash text not null unique,
+    token_prefix text not null,
+    created_at timestamptz not null default now(),
+    last_used_at timestamptz null,
+    revoked_at timestamptz null
+);
+
+create index if not exists personal_api_tokens_user_id_idx
+    on public.personal_api_tokens (user_id);
+
+alter table public.personal_api_tokens enable row level security;
+
+create policy "Users manage their own personal API tokens"
+    on public.personal_api_tokens
+    for all
+    using (auth.uid() = user_id)
+    with check (auth.uid() = user_id);

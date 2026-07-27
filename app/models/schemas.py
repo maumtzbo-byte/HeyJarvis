@@ -19,9 +19,15 @@ class QueryRequest(BaseModel):
     question: str = Field(..., min_length=1, max_length=2000)
 
 
+class MemoryUsedItem(BaseModel):
+    id: str
+    summary: str
+
+
 class QueryResponse(BaseModel):
     response: str
     memories_used: List[str]
+    memories_used_detail: List[MemoryUsedItem] = Field(default_factory=list)
 
 
 class MemoryItem(BaseModel):
@@ -54,3 +60,23 @@ class ProfileResponse(BaseModel):
     tone: Optional[str] = None
     voice_style: Optional[str] = None
     onboarding_completed: bool = False
+
+
+class TokenCreateRequest(BaseModel):
+    label: str = Field(default="iOS app", max_length=100)
+
+
+class TokenCreateResponse(BaseModel):
+    id: str
+    raw_token: str
+    label: str
+    created_at: str
+
+
+class TokenListItem(BaseModel):
+    id: str
+    label: str
+    token_prefix: str
+    created_at: str
+    last_used_at: Optional[str] = None
+    revoked_at: Optional[str] = None
