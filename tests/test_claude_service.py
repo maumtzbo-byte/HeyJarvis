@@ -1,6 +1,9 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
+import pytest
+
+import app.services.claude_service as claude_service
 from app.services.claude_service import generate_answer, summarize_memory
 
 
@@ -105,3 +108,19 @@ def test_generate_answer_uses_name_and_pronouns_when_given(mock_get_client):
     prompt = mock_client.messages.create.call_args.kwargs["messages"][0]["content"]
     assert "user's name is Carlos" in prompt
     assert "pronouns are he/him" in prompt
+
+
+def test_get_client_raises_a_clear_error_when_the_api_key_is_missing():
+    """A missing ANTHROPIC_API_KEY has bitten this deployment before (Railway
+    env vars not set) — this guards that the error stays specific enough to
+    debug from logs alone, instead of regressing into a generic crash."""
+    original_client = claude_service._client
+    original_key = claude_service.settings.anthropic_api_key
+    claude_service._client = None
+    claude_service.settings.anthropic_api_key = ""
+    try:
+        with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY"):
+            claude_service._get_client()
+    finally:
+        claude_service._client = original_client
+        claude_service.settings.anthropic_api_key = original_key

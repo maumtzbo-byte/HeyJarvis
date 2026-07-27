@@ -48,6 +48,15 @@ def test_query_rejects_missing_fields():
     assert response.status_code == 422
 
 
+def test_query_rejects_question_over_the_length_limit():
+    response = client.post(
+        "/query",
+        json={"user_id": "test-user", "question": "a" * 2001},
+    )
+
+    assert response.status_code == 422
+
+
 @patch("app.routers.query.get_profile")
 @patch("app.routers.query.generate_answer")
 @patch("app.routers.query.search_memories")

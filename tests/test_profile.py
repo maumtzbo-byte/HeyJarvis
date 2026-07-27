@@ -96,3 +96,25 @@ def test_put_profile_rejects_missing_fields(mock_get_client):
     )
 
     assert response.status_code == 422
+
+
+@patch("app.dependencies.get_supabase_client")
+def test_put_profile_rejects_full_name_over_the_length_limit(mock_get_client):
+    """The onboarding UI only ever sends short values here, but nothing on
+    the server stopped an arbitrarily long string from being stored (and
+    later fed into the Claude prompt) if the endpoint were called directly."""
+    mock_get_client.return_value.auth.get_user.return_value.user.id = "user-123"
+
+    response = client.put(
+        "/profile",
+        headers={"Authorization": "Bearer good-token"},
+        json={
+            "full_name": "a" * 201,
+            "use_case": "work",
+            "focus_areas": ["meetings"],
+            "tone": "warm and friendly",
+            "voice_style": "encouraging coach",
+        },
+    )
+
+    assert response.status_code == 422

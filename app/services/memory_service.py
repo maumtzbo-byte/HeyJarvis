@@ -40,7 +40,17 @@ def create_memory(user_id: str, text: str) -> Tuple[str, str, Optional[str]]:
             metadatas=[{"user_id": user_id, "created_at": created_at}],
         )
     except Exception:
-        logger.exception("Failed saving the embedding to ChromaDB")
+        logger.exception(
+            "Failed saving the embedding to ChromaDB; rolling back the Supabase row "
+            "for memory %s so it isn't left permanently unsearchable",
+            memory_id,
+        )
+        try:
+            get_supabase_client().table(MEMORIES_TABLE).delete().eq("id", memory_id).execute()
+        except Exception:
+            logger.exception(
+                "Rollback failed: memory %s is saved in Supabase but has no embedding", memory_id
+            )
         raise
 
     return memory_id, summary, reminder_at

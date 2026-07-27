@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class MemoryCreateRequest(BaseModel):
     user_id: str = Field(..., min_length=1)
-    text: str = Field(..., min_length=1)
+    text: str = Field(..., min_length=1, max_length=4000)
 
 
 class MemoryCreateResponse(BaseModel):
@@ -16,7 +16,7 @@ class MemoryCreateResponse(BaseModel):
 
 class QueryRequest(BaseModel):
     user_id: str = Field(..., min_length=1)
-    question: str = Field(..., min_length=1)
+    question: str = Field(..., min_length=1, max_length=2000)
 
 
 class QueryResponse(BaseModel):
@@ -38,12 +38,12 @@ class MemoriesListResponse(BaseModel):
 
 
 class ProfileRequest(BaseModel):
-    full_name: str = Field(..., min_length=1)
-    pronouns: Optional[str] = None
-    use_case: str = Field(..., min_length=1)
-    focus_areas: List[str] = Field(default_factory=list)
-    tone: str = Field(..., min_length=1)
-    voice_style: str = Field(..., min_length=1)
+    full_name: str = Field(..., min_length=1, max_length=200)
+    pronouns: Optional[str] = Field(default=None, max_length=100)
+    use_case: str = Field(..., min_length=1, max_length=100)
+    focus_areas: List[str] = Field(default_factory=list, max_length=20)
+    tone: str = Field(..., min_length=1, max_length=200)
+    voice_style: str = Field(..., min_length=1, max_length=200)
 
 
 class ProfileResponse(BaseModel):

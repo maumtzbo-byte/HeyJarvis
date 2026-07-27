@@ -63,6 +63,15 @@ def test_add_memory_rejects_missing_fields():
     assert response.status_code == 422
 
 
+def test_add_memory_rejects_text_over_the_length_limit():
+    response = client.post(
+        "/memory",
+        json={"user_id": "test-user", "text": "a" * 4001},
+    )
+
+    assert response.status_code == 422
+
+
 @patch("app.routers.memory.list_memories")
 def test_get_memories_returns_list_for_user(mock_list):
     mock_list.return_value = [
