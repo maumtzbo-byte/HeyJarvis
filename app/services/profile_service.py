@@ -22,6 +22,8 @@ def get_profile(user_id: str) -> Optional[dict]:
 
 def upsert_profile(
     user_id: str,
+    full_name: str,
+    pronouns: Optional[str],
     use_case: str,
     focus_areas: List[str],
     tone: str,
@@ -29,6 +31,8 @@ def upsert_profile(
 ) -> dict:
     payload = {
         "user_id": user_id,
+        "full_name": full_name,
+        "pronouns": pronouns,
         "use_case": use_case,
         "focus_areas": focus_areas,
         "tone": tone,

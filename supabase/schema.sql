@@ -28,6 +28,8 @@ create policy "Users can only see their own memories"
 -- real auth.users id, so it only ever applies to real signed-up users.
 create table if not exists public.profiles (
     user_id uuid primary key references auth.users(id) on delete cascade,
+    full_name text,
+    pronouns text,
     use_case text,
     focus_areas text[] not null default '{}',
     tone text,

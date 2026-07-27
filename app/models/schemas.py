@@ -38,6 +38,8 @@ class MemoriesListResponse(BaseModel):
 
 
 class ProfileRequest(BaseModel):
+    full_name: str = Field(..., min_length=1)
+    pronouns: Optional[str] = None
     use_case: str = Field(..., min_length=1)
     focus_areas: List[str] = Field(default_factory=list)
     tone: str = Field(..., min_length=1)
@@ -45,6 +47,8 @@ class ProfileRequest(BaseModel):
 
 
 class ProfileResponse(BaseModel):
+    full_name: Optional[str] = None
+    pronouns: Optional[str] = None
     use_case: Optional[str] = None
     focus_areas: List[str] = Field(default_factory=list)
     tone: Optional[str] = None

@@ -87,3 +87,21 @@ def test_generate_answer_with_preferences_adds_style_instructions(mock_get_clien
     prompt = mock_client.messages.create.call_args.kwargs["messages"][0]["content"]
     assert "tone: warm and friendly" in prompt
     assert "personality: encouraging coach" in prompt
+
+
+@patch("app.services.claude_service._get_client")
+def test_generate_answer_uses_name_and_pronouns_when_given(mock_get_client):
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = _text_message("Thursday at 3pm.")
+    mock_get_client.return_value = mock_client
+
+    generate_answer(
+        "When is my meeting?",
+        ["Meeting with Carlos on Thursday at 3pm"],
+        full_name="Carlos",
+        pronouns="he/him",
+    )
+
+    prompt = mock_client.messages.create.call_args.kwargs["messages"][0]["content"]
+    assert "user's name is Carlos" in prompt
+    assert "pronouns are he/him" in prompt

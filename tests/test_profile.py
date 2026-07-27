@@ -47,6 +47,8 @@ def test_get_profile_returns_defaults_when_none_saved_yet(mock_get_client, mock_
 def test_put_profile_saves_onboarding_answers(mock_get_client, mock_upsert):
     mock_get_client.return_value.auth.get_user.return_value.user.id = "user-123"
     mock_upsert.return_value = {
+        "full_name": "Carlos",
+        "pronouns": "he/him",
         "use_case": "work",
         "focus_areas": ["meetings", "ideas"],
         "tone": "warm and friendly",
@@ -58,6 +60,8 @@ def test_put_profile_saves_onboarding_answers(mock_get_client, mock_upsert):
         "/profile",
         headers={"Authorization": "Bearer good-token"},
         json={
+            "full_name": "Carlos",
+            "pronouns": "he/him",
             "use_case": "work",
             "focus_areas": ["meetings", "ideas"],
             "tone": "warm and friendly",
@@ -68,9 +72,16 @@ def test_put_profile_saves_onboarding_answers(mock_get_client, mock_upsert):
     assert response.status_code == 200
     data = response.json()
     assert data["onboarding_completed"] is True
+    assert data["full_name"] == "Carlos"
     assert data["tone"] == "warm and friendly"
     mock_upsert.assert_called_once_with(
-        "user-123", "work", ["meetings", "ideas"], "warm and friendly", "encouraging coach"
+        "user-123",
+        "Carlos",
+        "he/him",
+        "work",
+        ["meetings", "ideas"],
+        "warm and friendly",
+        "encouraging coach",
     )
 
 

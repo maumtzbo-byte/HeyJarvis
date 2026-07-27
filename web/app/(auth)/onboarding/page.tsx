@@ -6,13 +6,14 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../../lib/supabase-client";
 import {
   focusAreaOptions,
+  pronounOptions,
   toneOptions,
   useCaseOptions,
   voiceStyleOptions,
 } from "../../content/onboarding-content";
 
 const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-const STEP_COUNT = 4;
+const STEP_COUNT = 5;
 
 function getApiUrl() {
   if (typeof window === "undefined") return DEFAULT_API_URL;
@@ -25,6 +26,8 @@ export default function OnboardingPage() {
   const [session, setSession] = useState<Session | null>(null);
 
   const [step, setStep] = useState(0);
+  const [fullName, setFullName] = useState("");
+  const [pronouns, setPronouns] = useState("");
   const [useCase, setUseCase] = useState("");
   const [focusAreas, setFocusAreas] = useState<string[]>([]);
   const [tone, setTone] = useState("");
@@ -34,12 +37,32 @@ export default function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       if (!data.session) {
         router.replace("/login");
         return;
       }
       setSession(data.session);
+
+      try {
+        const response = await fetch(`${getApiUrl().replace(/\/$/, "")}/profile`, {
+          headers: { Authorization: `Bearer ${data.session.access_token}` },
+        });
+        if (response.ok) {
+          const profile = await response.json();
+          if (profile.onboarding_completed) {
+            setFullName(profile.full_name ?? "");
+            setPronouns(profile.pronouns ?? "");
+            setUseCase(profile.use_case ?? "");
+            setFocusAreas(profile.focus_areas ?? []);
+            setTone(profile.tone ?? "");
+            setVoiceStyle(profile.voice_style ?? "");
+          }
+        }
+      } catch {
+        // Backend unreachable: fine, just start with a blank form.
+      }
+
       setCheckingSession(false);
     });
   }, [router]);
@@ -62,7 +85,14 @@ export default function OnboardingPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ use_case: useCase, focus_areas: focusAreas, tone, voice_style: voiceStyle }),
+        body: JSON.stringify({
+          full_name: fullName.trim(),
+          pronouns: pronouns || null,
+          use_case: useCase,
+          focus_areas: focusAreas,
+          tone,
+          voice_style: voiceStyle,
+        }),
       });
 
       if (!response.ok) {
@@ -87,10 +117,11 @@ export default function OnboardingPage() {
   }
 
   const canContinue =
-    (step === 0 && useCase) ||
-    (step === 1 && focusAreas.length > 0) ||
-    (step === 2 && tone) ||
-    (step === 3 && voiceStyle);
+    (step === 0 && fullName.trim().length > 0) ||
+    (step === 1 && useCase) ||
+    (step === 2 && focusAreas.length > 0) ||
+    (step === 3 && tone) ||
+    (step === 4 && voiceStyle);
 
   return (
     <div className="w-full max-w-lg rounded-2xl border border-border bg-surface p-8">
@@ -106,6 +137,59 @@ export default function OnboardingPage() {
       </div>
 
       {step === 0 && (
+        <div className="mt-6 flex flex-col gap-4">
+          <div>
+            <h1
+              style={{ fontFamily: "var(--font-display)" }}
+              className="text-xl font-semibold tracking-tight"
+            >
+              What should we call you?
+            </h1>
+            <p className="mt-1 text-sm text-muted">
+              So HeyYarvis can talk to you like it actually knows you.
+            </p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="fullName" className="text-sm font-medium">
+              Name
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              autoFocus
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              placeholder="Carlos"
+              className="h-11 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-warm/50"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium">
+              Pronouns <span className="text-muted">(optional)</span>
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {pronounOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() =>
+                    setPronouns((current) => (current === option.value ? "" : option.value))
+                  }
+                  className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                    pronouns === option.value
+                      ? "border-accent-warm bg-accent-warm/[0.08] text-foreground"
+                      : "border-border text-muted hover:border-accent-warm/40"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {step === 1 && (
         <div className="mt-6 flex flex-col gap-4">
           <div>
             <h1
@@ -136,7 +220,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {step === 1 && (
+      {step === 2 && (
         <div className="mt-6 flex flex-col gap-4">
           <div>
             <h1
@@ -169,7 +253,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {step === 2 && (
+      {step === 3 && (
         <div className="mt-6 flex flex-col gap-4">
           <div>
             <h1
@@ -200,7 +284,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {step === 3 && (
+      {step === 4 && (
         <div className="mt-6 flex flex-col gap-4">
           <div>
             <h1

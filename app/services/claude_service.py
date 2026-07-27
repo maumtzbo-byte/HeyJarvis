@@ -101,7 +101,12 @@ def summarize_memory(text: str) -> Tuple[str, Optional[str]]:
         raise
 
 
-def _build_answer_instructions(tone: Optional[str], voice_style: Optional[str]) -> str:
+def _build_answer_instructions(
+    tone: Optional[str],
+    voice_style: Optional[str],
+    full_name: Optional[str],
+    pronouns: Optional[str],
+) -> str:
     instructions = ANSWER_INSTRUCTIONS
     style_bits = []
     if tone:
@@ -112,6 +117,13 @@ def _build_answer_instructions(tone: Optional[str], voice_style: Optional[str]) 
         instructions += (
             " Match the user's preferred speaking style (" + ", ".join(style_bits) + ")."
         )
+    if full_name:
+        instructions += (
+            f" The user's name is {full_name} — use it naturally once in a while (e.g. "
+            "at the start of an answer), not in every sentence."
+        )
+    if pronouns:
+        instructions += f" If you refer to the user in the third person, their pronouns are {pronouns}."
     return instructions
 
 
@@ -120,6 +132,8 @@ def generate_answer(
     context_memories: List[str],
     tone: Optional[str] = None,
     voice_style: Optional[str] = None,
+    full_name: Optional[str] = None,
+    pronouns: Optional[str] = None,
 ) -> str:
     logger.info(
         "Calling Claude to answer the question using %d context memories",
@@ -133,7 +147,7 @@ def generate_answer(
     prompt = (
         f"User's saved memories:\n{context_block}\n\n"
         f"User's question: {question}\n\n"
-        f"{_build_answer_instructions(tone, voice_style)}"
+        f"{_build_answer_instructions(tone, voice_style, full_name, pronouns)}"
     )
     try:
         message = _get_client().messages.create(

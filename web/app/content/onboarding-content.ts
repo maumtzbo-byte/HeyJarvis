@@ -1,3 +1,10 @@
+export const pronounOptions = [
+  { value: "she/her", label: "She/her" },
+  { value: "he/him", label: "He/him" },
+  { value: "they/them", label: "They/them" },
+  { value: "prefer not to say", label: "Prefer not to say" },
+];
+
 export const useCaseOptions = [
   { value: "work", label: "Work", description: "Meetings, decisions, tasks" },
   { value: "personal", label: "Personal life", description: "Errands, family, everyday things" },

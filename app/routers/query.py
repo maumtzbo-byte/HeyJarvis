@@ -18,19 +18,28 @@ async def query_memories(payload: QueryRequest) -> QueryResponse:
         memories = search_memories(payload.user_id, payload.question)
         context = [memory["summary"] for memory in memories]
 
-        tone = voice_style = None
+        tone = voice_style = full_name = pronouns = None
         try:
             profile = get_profile(payload.user_id)
             if profile:
                 tone = profile.get("tone")
                 voice_style = profile.get("voice_style")
+                full_name = profile.get("full_name")
+                pronouns = profile.get("pronouns")
         except Exception:
             logger.info(
                 "No onboarding preferences for user %s, answering with a neutral tone",
                 payload.user_id,
             )
 
-        answer = generate_answer(payload.question, context, tone=tone, voice_style=voice_style)
+        answer = generate_answer(
+            payload.question,
+            context,
+            tone=tone,
+            voice_style=voice_style,
+            full_name=full_name,
+            pronouns=pronouns,
+        )
         return QueryResponse(
             response=answer,
             memories_used=[memory["id"] for memory in memories],

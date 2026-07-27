@@ -3,12 +3,14 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { PreviewBadge } from "../components/dashboard/preview-badge";
+import { useProfileName } from "../lib/use-profile-name";
 import { mockMemories } from "./mock-data";
 
 const GROUP_ORDER = ["Today", "Yesterday", "This week", "Last week"];
 
 export default function DashboardPage() {
   const [query, setQuery] = useState("");
+  const name = useProfileName();
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -44,8 +46,8 @@ export default function DashboardPage() {
           <PreviewBadge />
         </div>
         <p className="text-sm text-muted">
-          Everything you&rsquo;ve told HeyYarvis, searchable by meaning — not
-          just keywords.
+          {name ? `Hey ${name} — e` : "E"}verything you&rsquo;ve told HeyYarvis, searchable by
+          meaning — not just keywords.
         </p>
       </div>
 

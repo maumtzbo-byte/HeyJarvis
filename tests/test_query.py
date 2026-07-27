@@ -59,6 +59,8 @@ def test_query_passes_onboarding_preferences_to_the_answer(
     mock_get_profile.return_value = {
         "tone": "warm and friendly",
         "voice_style": "encouraging coach",
+        "full_name": "Carlos",
+        "pronouns": "he/him",
     }
 
     response = client.post(
@@ -72,6 +74,8 @@ def test_query_passes_onboarding_preferences_to_the_answer(
         ["Meeting with Carlos Thursday"],
         tone="warm and friendly",
         voice_style="encouraging coach",
+        full_name="Carlos",
+        pronouns="he/him",
     )
 
 
@@ -92,5 +96,5 @@ def test_query_still_works_when_there_is_no_profile(
 
     assert response.status_code == 200
     mock_generate.assert_called_once_with(
-        "What's the wifi password?", [], tone=None, voice_style=None
+        "What's the wifi password?", [], tone=None, voice_style=None, full_name=None, pronouns=None
     )

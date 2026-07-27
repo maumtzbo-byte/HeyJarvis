@@ -29,6 +29,8 @@ async def save_profile(
     try:
         profile = upsert_profile(
             user_id,
+            payload.full_name,
+            payload.pronouns,
             payload.use_case,
             payload.focus_areas,
             payload.tone,
