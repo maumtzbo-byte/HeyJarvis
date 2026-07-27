@@ -1,28 +1,89 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { PreviewBadge } from "../components/dashboard/preview-badge";
+import { buildApiUrl } from "../lib/api-url";
+import { bucketLabel, formatMemoryTime, GROUP_ORDER } from "../lib/memory-grouping";
 import { useProfileName } from "../lib/use-profile-name";
-import { mockMemories } from "./mock-data";
+import { supabase } from "../lib/supabase-client";
+import { mockMemories, type MockMemory } from "./mock-data";
 
-const GROUP_ORDER = ["Today", "Yesterday", "This week", "Last week"];
+type RealMemory = {
+  id: string;
+  text: string;
+  summary: string;
+  created_at: string;
+  reminder_at: string | null;
+};
 
 export default function DashboardPage() {
   const [query, setQuery] = useState("");
   const name = useProfileName();
 
+  const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
+  const [realMemories, setRealMemories] = useState<RealMemory[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) {
+        if (!cancelled) {
+          setUsingFallback(true);
+          setLoading(false);
+        }
+        return;
+      }
+      try {
+        const response = await fetch(buildApiUrl(`/memories/${data.session.user.id}`), {
+          headers: { Authorization: `Bearer ${data.session.access_token}` },
+        });
+        if (!response.ok) throw new Error(`Error ${response.status}`);
+        const body = await response.json();
+        if (!cancelled) {
+          setRealMemories(body.memories ?? []);
+          setUsingFallback(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setRealMemories(null);
+          setUsingFallback(true);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const displayMemories: MockMemory[] = useMemo(() => {
+    if (usingFallback || !realMemories) return mockMemories;
+    return realMemories.map((memory) => {
+      const group = bucketLabel(memory.created_at);
+      return {
+        id: memory.id,
+        summary: memory.summary,
+        text: memory.text,
+        group,
+        time: formatMemoryTime(memory.created_at, group),
+      };
+    });
+  }, [usingFallback, realMemories]);
+
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
     const filtered = q
-      ? mockMemories.filter(
+      ? displayMemories.filter(
           (memory) =>
             memory.summary.toLowerCase().includes(q) ||
             memory.text.toLowerCase().includes(q)
         )
-      : mockMemories;
+      : displayMemories;
 
-    const map = new Map<string, typeof mockMemories>();
+    const map = new Map<string, typeof displayMemories>();
     for (const memory of filtered) {
       const bucket = map.get(memory.group) ?? [];
       bucket.push(memory);
@@ -31,7 +92,9 @@ export default function DashboardPage() {
     return GROUP_ORDER.map((label) => [label, map.get(label) ?? []] as const).filter(
       ([, items]) => items.length > 0
     );
-  }, [query]);
+  }, [query, displayMemories]);
+
+  const isRealAndEmpty = !usingFallback && !loading && displayMemories.length === 0;
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-10 sm:py-16">
@@ -43,7 +106,7 @@ export default function DashboardPage() {
           >
             Memories
           </h1>
-          <PreviewBadge />
+          {usingFallback && <PreviewBadge />}
         </div>
         <p className="text-sm text-muted">
           {name ? `Hey ${name} — e` : "E"}verything you&rsquo;ve told HeyYarvis, searchable by
@@ -64,7 +127,15 @@ export default function DashboardPage() {
         />
       </div>
 
-      {groups.length === 0 ? (
+      {loading ? (
+        <p className="text-sm text-muted">Loading...</p>
+      ) : isRealAndEmpty ? (
+        <p className="text-sm text-muted">
+          Nothing yet — try saying{" "}
+          <span className="text-foreground">&ldquo;Hey Siri, remember...&rdquo;</span> and
+          it&rsquo;ll show up here.
+        </p>
+      ) : groups.length === 0 ? (
         <p className="text-sm text-muted">
           No memories match &ldquo;{query}&rdquo;.
         </p>

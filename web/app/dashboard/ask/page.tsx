@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { PreviewBadge } from "../../components/dashboard/preview-badge";
+import { buildApiUrl } from "../../lib/api-url";
+import { supabase } from "../../lib/supabase-client";
 import { mockConversationStarter, type MockChatMessage } from "../mock-data";
 
 const CANNED_RESPONSE =
@@ -12,13 +14,26 @@ export default function AskPage() {
   const [messages, setMessages] = useState<MockChatMessage[]>(mockConversationStarter);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
+  const [usingFallback, setUsingFallback] = useState(true);
   const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        // A real, working session — clear the seeded sample conversation
+        // rather than showing a signed-in user a fake exchange about
+        // "Carlos" they never had.
+        setMessages([]);
+        setUsingFallback(false);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, thinking]);
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = input.trim();
     if (!trimmed) return;
@@ -27,10 +42,43 @@ export default function AskPage() {
     setInput("");
     setThinking(true);
 
-    setTimeout(() => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
       setMessages((prev) => [...prev, { role: "assistant", text: CANNED_RESPONSE }]);
       setThinking(false);
-    }, 900);
+      setUsingFallback(true);
+      return;
+    }
+
+    try {
+      const response = await fetch(buildApiUrl("/query"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.session.access_token}`,
+        },
+        body: JSON.stringify({ user_id: data.session.user.id, question: trimmed }),
+      });
+      if (!response.ok) throw new Error(`Error ${response.status}`);
+      const body: {
+        response: string;
+        memories_used_detail: { id: string; summary: string }[];
+      } = await response.json();
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text: body.response,
+          memoriesUsed: body.memories_used_detail.map((m) => m.summary),
+        },
+      ]);
+      setUsingFallback(false);
+    } catch {
+      setMessages((prev) => [...prev, { role: "assistant", text: CANNED_RESPONSE }]);
+      setUsingFallback(true);
+    } finally {
+      setThinking(false);
+    }
   }
 
   return (
@@ -42,7 +90,7 @@ export default function AskPage() {
         >
           Ask
         </h1>
-        <PreviewBadge />
+        {usingFallback && <PreviewBadge />}
       </div>
       <p className="mt-2 text-sm text-muted">
         Ask about anything you&rsquo;ve told HeyYarvis, the same way you would with Siri.
@@ -59,7 +107,7 @@ export default function AskPage() {
             }
           >
             <p className="text-sm leading-relaxed text-foreground/90">{message.text}</p>
-            {message.memoriesUsed && (
+            {message.memoriesUsed && message.memoriesUsed.length > 0 && (
               <div className="mt-2.5 flex flex-wrap gap-1.5">
                 {message.memoriesUsed.map((used) => (
                   <span

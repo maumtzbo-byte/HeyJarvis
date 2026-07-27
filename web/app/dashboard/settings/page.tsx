@@ -1,96 +1,112 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
 import { API_URL_STORAGE_KEY, buildApiUrl, DEFAULT_API_URL } from "../../lib/api-url";
 import { isSupabaseConfigured, supabase } from "../../lib/supabase-client";
 
-type Memory = {
+type PersonalToken = {
   id: string;
-  text: string;
-  summary: string;
+  label: string;
+  token_prefix: string;
   created_at: string;
-};
-
-const STORAGE_KEYS = {
-  apiUrl: API_URL_STORAGE_KEY,
-  userId: "heyjarvis:userId",
+  last_used_at: string | null;
+  revoked_at: string | null;
 };
 
 export default function SettingsPage() {
   const [apiUrl, setApiUrl] = useState(DEFAULT_API_URL);
-  const [userId, setUserId] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [memories, setMemories] = useState<Memory[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
+  const [tokens, setTokens] = useState<PersonalToken[]>([]);
+  const [newRawToken, setNewRawToken] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [tokenError, setTokenError] = useState<string | null>(null);
+
   useEffect(() => {
-    // Reads stored values from the browser after mount: this can't happen in
-    // the useState initializer because the initial render must match between
+    // Reads the stored API URL after mount: this can't happen in the
+    // useState initializer because the initial render must match between
     // server and client to avoid a hydration mismatch.
-    const storedApiUrl = window.localStorage.getItem(STORAGE_KEYS.apiUrl);
-    const storedUserId = window.localStorage.getItem(STORAGE_KEYS.userId);
+    const storedApiUrl = window.localStorage.getItem(API_URL_STORAGE_KEY);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs with localStorage after mount
     if (storedApiUrl) setApiUrl(storedApiUrl);
-    if (storedUserId) setUserId(storedUserId);
   }, []);
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session && !window.localStorage.getItem(STORAGE_KEYS.userId)) {
-        setUserId(data.session.user.id);
-      }
+      if (data.session) fetchTokens(data.session.access_token);
     });
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
     });
     return () => subscription.subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function fetchTokens(accessToken: string) {
+    try {
+      const response = await fetch(buildApiUrl("/profile/tokens", apiUrl), {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (!response.ok) return;
+      setTokens(await response.json());
+    } catch {
+      // Backend unreachable: leave the list empty, not a big deal.
+    }
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
   }
 
-  async function fetchMemories(event: FormEvent) {
-    event.preventDefault();
-    if (!userId.trim()) {
-      setError("Enter your user_id.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
+  async function handleGenerateToken() {
+    if (!session) return;
+    setGenerating(true);
+    setTokenError(null);
     try {
-      const response = await fetch(
-        buildApiUrl(`/memories/${encodeURIComponent(userId.trim())}`, apiUrl),
-        {
-          headers: apiKey ? { "X-API-Key": apiKey } : undefined,
-        }
-      );
-
+      const response = await fetch(buildApiUrl("/profile/tokens", apiUrl), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ label: "iOS app" }),
+      });
       if (!response.ok) {
         const body = await response.json().catch(() => null);
-        throw new Error(body?.detail ?? `Error ${response.status} calling the API`);
+        throw new Error(body?.detail ?? `Error ${response.status} generating the token`);
       }
-
       const data = await response.json();
-      setMemories(data.memories ?? []);
-
-      window.localStorage.setItem(STORAGE_KEYS.apiUrl, apiUrl);
-      window.localStorage.setItem(STORAGE_KEYS.userId, userId.trim());
+      setNewRawToken(data.raw_token);
+      await fetchTokens(session.access_token);
     } catch (err) {
-      setMemories(null);
-      setError(
-        err instanceof Error ? err.message : "Could not connect to the HeyYarvis API."
+      setTokenError(
+        err instanceof Error ? err.message : "Could not generate a token."
       );
     } finally {
-      setLoading(false);
+      setGenerating(false);
+    }
+  }
+
+  async function handleRevoke(tokenId: string) {
+    if (!session) return;
+    setTokenError(null);
+    try {
+      const response = await fetch(buildApiUrl(`/profile/tokens/${tokenId}`, apiUrl), {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (!response.ok && response.status !== 404) {
+        throw new Error(`Error ${response.status} revoking the token`);
+      }
+      await fetchTokens(session.access_token);
+    } catch (err) {
+      setTokenError(
+        err instanceof Error ? err.message : "Could not revoke the token."
+      );
     }
   }
 
@@ -104,8 +120,8 @@ export default function SettingsPage() {
           Settings
         </h1>
         <p className="text-sm text-muted">
-          Memories and Ask show sample data so you can preview the product.
-          Connect your real backend here to pull your actual saved memories.
+          Your account is connected automatically. Generate a personal API
+          token below to use HeyYarvis from Siri on iOS.
         </p>
       </div>
 
@@ -150,84 +166,84 @@ export default function SettingsPage() {
         )}
       </div>
 
-      <form
-        onSubmit={fetchMemories}
-        className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6"
-      >
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="apiUrl" className="text-sm font-medium">
-            API URL
-          </label>
-          <input
-            id="apiUrl"
-            type="text"
-            value={apiUrl}
-            onChange={(event) => setApiUrl(event.target.value)}
-            placeholder="https://your-backend.onrender.com"
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="userId" className="text-sm font-medium">
-            user_id
-          </label>
-          <input
-            id="userId"
-            type="text"
-            value={userId}
-            onChange={(event) => setUserId(event.target.value)}
-            placeholder="carlos-123"
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="apiKey" className="text-sm font-medium">
-            API key <span className="text-muted">(optional)</span>
-          </label>
-          <input
-            id="apiKey"
-            type="password"
-            value={apiKey}
-            onChange={(event) => setApiKey(event.target.value)}
-            placeholder="Only if the backend requires it"
-            className="h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
-            autoComplete="off"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          {loading ? "Searching..." : "Fetch real memories"}
-        </button>
-      </form>
-
-      {error && (
-        <p className="rounded-md border border-red-900/60 bg-red-950/40 px-4 py-3 text-sm text-red-300">
-          {error}
+      <div className="flex flex-col gap-1.5 rounded-2xl border border-border bg-surface p-6">
+        <label htmlFor="apiUrl" className="text-sm font-medium">
+          API URL
+        </label>
+        <p className="text-xs text-muted">
+          Only change this if you&rsquo;re pointing the dashboard at a local or custom backend.
         </p>
-      )}
+        <input
+          id="apiUrl"
+          type="text"
+          value={apiUrl}
+          onChange={(event) => {
+            setApiUrl(event.target.value);
+            window.localStorage.setItem(API_URL_STORAGE_KEY, event.target.value);
+          }}
+          placeholder="https://your-backend.onrender.com"
+          className="mt-2 h-10 rounded-md border border-border bg-transparent px-3 text-sm outline-none focus:border-accent-cool/50"
+        />
+      </div>
 
-      {memories && memories.length === 0 && !error && (
-        <p className="text-sm text-muted">No memories saved for this user yet.</p>
-      )}
+      {session && (
+        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-6">
+          <h2 className="text-sm font-medium">Personal API token</h2>
+          <p className="text-xs text-muted">
+            Paste this into the HeyYarvis iOS app&rsquo;s Settings → API key field so Siri
+            shortcuts can read and save your memories.
+          </p>
 
-      {memories && memories.length > 0 && (
-        <ul className="flex flex-col gap-3">
-          {memories.map((memory) => (
-            <li key={memory.id} className="rounded-2xl border border-border bg-surface p-4">
-              <p className="text-sm font-medium">{memory.summary}</p>
-              <p className="mt-1 text-sm text-muted">{memory.text}</p>
-              <p className="mt-2 text-xs text-muted/85">
-                {new Date(memory.created_at).toLocaleString("en-US")}
+          {newRawToken && (
+            <div className="rounded-md border border-accent-cool/30 bg-accent-cool/[0.06] p-3">
+              <p className="break-all font-mono text-xs">{newRawToken}</p>
+              <p className="mt-1 text-[11px] text-muted">
+                Copy this now — you won&rsquo;t be able to see it again.
               </p>
-            </li>
-          ))}
-        </ul>
+            </div>
+          )}
+
+          {tokenError && (
+            <p className="rounded-md border border-red-900/60 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+              {tokenError}
+            </p>
+          )}
+
+          <button
+            type="button"
+            onClick={handleGenerateToken}
+            disabled={generating}
+            className="inline-flex h-10 w-fit items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+          >
+            {generating ? "Generating..." : "Generate new token"}
+          </button>
+
+          {tokens.length > 0 && (
+            <ul className="mt-2 flex flex-col gap-2">
+              {tokens.map((token) => (
+                <li
+                  key={token.id}
+                  className="flex items-center justify-between gap-3 text-xs text-muted"
+                >
+                  <span>
+                    {token.label} · …{token.token_prefix.slice(-6)} · created{" "}
+                    {new Date(token.created_at).toLocaleDateString("en-US")}
+                    {token.revoked_at && " · revoked"}
+                  </span>
+                  {!token.revoked_at && (
+                    <button
+                      type="button"
+                      onClick={() => handleRevoke(token.id)}
+                      className="shrink-0 text-red-400 transition-colors hover:text-red-300"
+                    >
+                      Revoke
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );
