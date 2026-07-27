@@ -75,7 +75,7 @@ export default function SiteHeader() {
         <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
           <Image
             src="/brand/logo-mark.png"
-            alt="HeyYarvis"
+            alt=""
             width={32}
             height={32}
             className="rounded-full"

@@ -21,7 +21,7 @@ export function DashboardSidebar() {
         <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/brand/logo-mark.png"
-            alt="HeyYarvis"
+            alt=""
             width={28}
             height={28}
             className="rounded-full"

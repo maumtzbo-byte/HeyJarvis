@@ -139,6 +139,7 @@ export default function ConnectorsPage() {
                     <button
                       type="button"
                       disabled
+                      title="Coming soon — not live yet"
                       className="shrink-0 cursor-not-allowed rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted/80"
                     >
                       Connect

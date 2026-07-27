@@ -11,7 +11,7 @@ export default function MarketingLayout({
     <div className="flex flex-1 flex-col">
       <ScrollProgress />
       <SiteHeader />
-      <div className="relative z-10 flex flex-1 flex-col">{children}</div>
+      <main className="relative z-10 flex flex-1 flex-col">{children}</main>
       <SiteFooter />
     </div>
   );
