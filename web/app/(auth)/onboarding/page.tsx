@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../../lib/supabase-client";
 import {
+  findPersonaByToneAndVoice,
   focusAreaOptions,
+  jarvisPersonas,
   pronounOptions,
-  toneOptions,
   useCaseOptions,
-  voiceStyleOptions,
 } from "../../content/onboarding-content";
+import { JarvisPersonaCarousel } from "../../components/onboarding/jarvis-persona-carousel";
+import { PersonalizeToneVoice } from "../../components/onboarding/personalize-tone-voice";
 
 const DEFAULT_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-const STEP_COUNT = 5;
+const STEP_COUNT = 4;
 
 function getApiUrl() {
   if (typeof window === "undefined") return DEFAULT_API_URL;
@@ -47,9 +49,36 @@ export default function OnboardingPage() {
   const [focusAreas, setFocusAreas] = useState<string[]>([]);
   const [tone, setTone] = useState("");
   const [voiceStyle, setVoiceStyle] = useState("");
+  const [personaMode, setPersonaMode] = useState<"curated" | "custom">("curated");
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Measured from a permanent block-level sibling of the step content, not
+  // from anything inside the carousel: the carousel's own card widths are
+  // derived from this measurement, so measuring an element that shares an
+  // auto-sized ancestor with the carousel's content creates a feedback loop
+  // (confirmed empirically — width balloons geometrically across renders).
+  // This div sits directly inside the fixed-width (max-w-lg) outer card, as
+  // a plain block sibling, so its width is fixed by the card alone.
+  //
+  // A callback ref (not useRef+useEffect([])) because the sizer only enters
+  // the DOM once `checkingSession` flips false and the real card renders —
+  // an effect with an empty dep array fires on the earlier "Loading..." commit,
+  // before the node exists, and never re-runs to pick it up.
+  const [sizerNode, setSizerNode] = useState<HTMLDivElement | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!sizerNode) return;
+    function measure() {
+      setViewportWidth(sizerNode?.offsetWidth ?? 0);
+    }
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(sizerNode);
+    return () => ro.disconnect();
+  }, [sizerNode]);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
@@ -72,6 +101,9 @@ export default function OnboardingPage() {
             setFocusAreas(profile.focus_areas ?? []);
             setTone(profile.tone ?? "");
             setVoiceStyle(profile.voice_style ?? "");
+            setPersonaMode(
+              findPersonaByToneAndVoice(profile.tone, profile.voice_style) ? "curated" : "custom"
+            );
           }
         }
       } catch {
@@ -135,8 +167,7 @@ export default function OnboardingPage() {
     (step === 0 && fullName.trim().length > 0) ||
     (step === 1 && useCase) ||
     (step === 2 && focusAreas.length > 0) ||
-    (step === 3 && tone) ||
-    (step === 4 && voiceStyle);
+    (step === 3 && tone.length > 0 && voiceStyle.length > 0);
 
   return (
     <div className="liquid-glass w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/10 bg-surface/70 p-8 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] sm:p-10">
@@ -150,6 +181,8 @@ export default function OnboardingPage() {
           />
         ))}
       </div>
+
+      <div ref={setSizerNode} aria-hidden className="-mx-8 h-px sm:-mx-10" />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -262,52 +295,40 @@ export default function OnboardingPage() {
           {step === 3 && (
             <div className="mt-7 flex flex-col gap-5">
               <StepHeading
-                title="What tone should it use when it answers you?"
-                subtitle="This changes how HeyYarvis actually replies."
+                title="Choose your Jarvis"
+                subtitle={
+                  personaMode === "curated"
+                    ? "Swipe to see each personality, or personalize your own."
+                    : "Mix and match the tone and personality yourself."
+                }
               />
-              <div className="grid gap-2.5 sm:grid-cols-2">
-                {toneOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setTone(option.value)}
-                    className={`rounded-2xl border p-4 text-left transition-colors ${
-                      tone === option.value
-                        ? "border-accent-cool bg-accent-cool/[0.08]"
-                        : "border-border hover:border-accent-cool/40"
-                    }`}
-                  >
-                    <p className="text-sm font-medium">{option.label}</p>
-                    <p className="mt-1 text-xs text-muted">{option.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
-          {step === 4 && (
-            <div className="mt-7 flex flex-col gap-5">
-              <StepHeading
-                title="What personality should it have?"
-                subtitle="Last one — this is the voice behind the answers."
-              />
-              <div className="grid gap-2.5 sm:grid-cols-2">
-                {voiceStyleOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setVoiceStyle(option.value)}
-                    className={`rounded-2xl border p-4 text-left transition-colors ${
-                      voiceStyle === option.value
-                        ? "border-accent-cool bg-accent-cool/[0.08]"
-                        : "border-border hover:border-accent-cool/40"
-                    }`}
-                  >
-                    <p className="text-sm font-medium">{option.label}</p>
-                    <p className="mt-1 text-xs text-muted">{option.description}</p>
-                  </button>
-                ))}
-              </div>
+              {personaMode === "curated" ? (
+                <JarvisPersonaCarousel
+                  personas={jarvisPersonas}
+                  selectedId={findPersonaByToneAndVoice(tone, voiceStyle)?.id ?? null}
+                  viewportWidth={viewportWidth}
+                  onSelect={(persona) => {
+                    setTone(persona.tone);
+                    setVoiceStyle(persona.voiceStyle);
+                  }}
+                />
+              ) : (
+                <PersonalizeToneVoice
+                  tone={tone}
+                  voiceStyle={voiceStyle}
+                  onToneChange={setTone}
+                  onVoiceStyleChange={setVoiceStyle}
+                />
+              )}
+
+              <button
+                type="button"
+                onClick={() => setPersonaMode((mode) => (mode === "curated" ? "custom" : "curated"))}
+                className="text-center text-sm text-muted underline underline-offset-2 transition-colors hover:text-foreground"
+              >
+                {personaMode === "curated" ? "Want a different mix? Personalize yours" : "‹ Back to curated picks"}
+              </button>
             </div>
           )}
         </motion.div>
