@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { isSupabaseConfigured, supabase } from "../../lib/supabase-client";
+import { OAuthButtons } from "../../components/auth/oauth-buttons";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -78,7 +79,17 @@ export default function SignupPage() {
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+      <div className="mt-6">
+        <OAuthButtons />
+      </div>
+
+      <div className="my-6 flex items-center gap-3 text-xs text-muted">
+        <span className="h-px flex-1 bg-border" />
+        or
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="email" className="text-sm font-medium">
             Email
